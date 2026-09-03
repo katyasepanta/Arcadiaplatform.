@@ -105,6 +105,71 @@
             .mascot-roaming-stage { top: -50px; right: 10px; left: 10px; }
             .messages-container { padding: 16px; }
         }
+                /* [نسخه ریسپانسیو اختصاصی - فیت صفحه بدون اسکرول خوردن چت به پایین] */
+        @media (max-width: 768px) {
+            body { 
+                flex-direction: column; 
+                height: 100vh;
+                height: 100dvh; /* هماهنگ با مرورگرهای موبایل */
+                overflow: hidden; 
+            }
+
+            /* سایدبار جمع‌وجور در بالای صفحه */
+            .sidebar { 
+                width: 100%; 
+                height: auto; 
+                padding: 10px 14px;
+                border-left: none; 
+                border-bottom: 1px solid var(--border-glass); 
+                flex-shrink: 0;
+            }
+
+            .sidebar-brand {
+                padding: 0 0 8px 0;
+            }
+
+            /* مخفی کردن بخش‌های اضافی سایدبار در موبایل تا چت فضای کامل داشته باشد */
+            .sidebar-actions,
+            .sidebar-menu-wrap,
+            .sidebar-footer {
+                display: none;
+            }
+
+            /* بخش چت تمام فضای باقیمانده صفحه را پر می‌کند */
+            .main-chat-area { 
+                flex: 1; 
+                height: auto;
+                min-height: 0; /* حیاتی برای کارکرد درست اسکرول پیام‌ها */
+                overflow: hidden;
+            }
+
+            .chat-top-bar {
+                height: 50px;
+                padding: 0 16px;
+            }
+
+            .messages-container { 
+                padding: 16px 14px; 
+                gap: 14px;
+            }
+
+            .input-wrapper-zone {
+                padding: 0 12px 14px 12px;
+            }
+
+            .mascot-roaming-stage { 
+                top: -50px; 
+                right: 15px; 
+                left: 15px; 
+                height: 50px;
+            }
+
+            .little-nova-runner {
+                width: 46px;
+                height: 46px;
+            }
+        }
+
     </style>
 </head>
 <body>
