@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Arcadia Platform | آرکادیا</title>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-Variable-font-face.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #030712;
+            --bg-2: #0b1220;
+            --panel: rgba(15, 23, 42, 0.72);
+            --panel-strong: rgba(17, 24, 39, 0.9);
+            --border: rgba(255, 255, 255, 0.08);
+            --text: #e5e7eb;
+            --muted: #9ca3af;
+            --primary: #2f80ff;
+            --primary-2: #00c6ff;
+            --shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: "Vazirmatn", sans-serif;
+            background:
+                radial-gradient(circle at top, rgba(47, 128, 255, 0.12), transparent 28%),
+                radial-gradient(circle at bottom left, rgba(0, 198, 255, 0.08), transparent 22%),
+                linear-gradient(180deg, var(--bg), var(--bg-2));
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* Stars */
+        .stars {
+            position: fixed;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            border-radius: 50%;
+            background: white;
+            opacity: 0.2;
+            animation: twinkle 4s infinite ease-in-out;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.15; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.6); }
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(3, 7, 18, 0.72);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            z-index: 1000;
+        }
+
+        .nav {
+            max-width: 1240px;
+            margin: 0 auto;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.1rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            color: var(--text);
+            white-space: nowrap;
+        }
+
+        .logo {
+            width: 38px;
+            height: 38px;
+            object-fit: cover;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-2));
+            box-shadow: 0 10px 25px rgba(47, 128, 255, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+        }
+
+        .menu {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+            list-style: none;
+        }
+
+        .menu a {
+            position: relative;
+            color: var(--muted);
+            font-size: 0.96rem;
+            font-weight: 500;
+            transition: 0.3s ease;
+            padding: 6px 0;
+        }
+
+        .menu a::after {
+            content: "";
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            width: 0;
+            height: 2px;
+            border-radius: 999px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-2));
+            transition: 0.3s ease;
+        }
+
+        .menu a:hover {
+            color: #fff;
+        }
+
+        .menu a:hover::after {
+            width: 100%;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .login {
+            padding: 10px 18px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, rgba(47, 128, 255, 0.14), rgba(0, 198, 255, 0.14));
+            border: 1px solid rgba(47, 128, 255, 0.28);
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.94rem;
+            transition: 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .login:hover {
+            transform: translateY(-1px);
+            border-color: rgba(0, 198, 255, 0.45);
+            box-shadow: 0 10px 28px rgba(47, 128, 255, 0.18);
+        }
+
+        .hamburger {
+            display: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.04);
+            color: #fff;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: 0.3s ease;
+        }
+
+        .hamburger:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-1px);
+        }
+
+        /* Hero */
+        main {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero {
+            max-width: 1240px;
+            margin: 0 auto;
+            padding: 180px 24px 100px;
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1.25fr 0.9fr;
+            gap: 48px;
+            align-items: center;
+        }
+
+        .hero-content h1 {
+            font-size: clamp(2.2rem, 4vw, 4.4rem);
+            line-height: 1.2;
+            margin-bottom: 18px;
+            color: #fff;
+        }
+
+        .hero-content p {
+            color: #cbd5e1;
+            font-size: 1.04rem;
+            line-height: 2;
+            max-width: 680px;
+            margin-bottom: 28px;
+        }
+
+        .hero-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .badge {
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: #dbeafe;
+            font-size: 0.9rem;
+        }
+
+        .cta-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+        }
+
+        .btn {
+            padding: 12px 22px;
+            border-radius: 14px;
+            font-weight: 700;
+            transition: 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-2));
+            color: #fff;
+            box-shadow: 0 18px 34px rgba(47, 128, 255, 0.24);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.04);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .profile-card {
+            background: linear-gradient(180deg, rgba(15, 23, 42, 0.78), rgba(15, 23, 42, 0.6));
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 28px;
+            padding: 18px;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(12px);
+        }
+
+        .profile-frame {
+            position: relative;
+            aspect-ratio: 1 / 1;
+            border-radius: 22px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .profile-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .profile-placeholder {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 24px;
+            color: #cbd5e1;
+            background:
+                linear-gradient(145deg, rgba(47, 128, 255, 0.12), rgba(0, 198, 255, 0.08)),
+                rgba(255, 255, 255, 0.02);
+            font-size: 0.98rem;
+            line-height: 1.9;
+        }
+
+        .profile-frame.has-image .profile-placeholder {
+            display: none;
+        }
+
+        .profile-caption {
+            margin-top: 14px;
+            text-align: center;
+            color: #cbd5e1;
+            font-size: 0.93rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero {
+                grid-template-columns: 1fr;
+                padding-top: 150px;
+            }
+
+            .profile-card {
+                max-width: 560px;
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 860px) {
+            .menu {
+                position: absolute;
+                top: calc(100% + 10px);
+                right: 24px;
+                left: 24px;
+                display: none;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+                padding: 16px;
+                background: rgba(3, 7, 18, 0.95);
+                border: 1px solid rgba(255, 255, 255, 0.08);
+                border-radius: 18px;
+                box-shadow: var(--shadow);
+            }
+
+            .menu.active {
+                display: flex;
+            }
+
+            .menu a {
+                display: block;
+                padding: 10px 8px;
+            }
+
+            .nav-right {
+                margin-right: auto;
+            }
+
+            .hamburger {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .login {
+                display: none;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .nav {
+                padding: 14px 16px;
+            }
+
+            .hero {
+                padding: 140px 16px 80px;
+            }
+
+            .hero-content p {
+                font-size: 0.98rem;
+            }
+
+            .brand {
+                font-size: 1rem;
+            }
+
+            .logo {
+                width: 34px;
+                height: 34px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars" id="starContainer"></div>
+
+    <header>
+        <div class="nav">
+            <a class="brand" href="index.html">
+                <img class="logo" src="logo.png" alt="لوگوی آرکادیا" onerror="this.style.display='none'">
+                <span>ARCADIA</span>
+            </a>
+
+            <nav class="menu" id="menu" aria-label="ناوبری اصلی">
+                <a href="#academy">آموزشگاه</a>
+                <a href="#cart">سبد خرید</a>
+                <a href="#roadmap">نقشه راه</a>
+                <a href="#home">صفحه اصلی</a>
+                <a href="#founder">خالق آرکادیا</a>
+                <a href="#about">درباره ما</a>
+            </nav>
+
+            <div class="nav-right">
+                <a href="login.html" class="login">ورود / ثبت نام</a>
+                <button class="hamburger" id="hamburger" aria-label="باز و بسته کردن منو" aria-expanded="false">☰</button>
+            </div>
+        </div>
+    </header>
+
+    <main id="home">
+        <section class="hero">
+            <div class="hero-content">
+                <h1>سلام، من کاتیا هستم.</h1>
+                <div class="hero-badges">
+                    <span class="badge">موسس مجموعه آرکادیا</span>
+                    <span class="badge">مهندسی کامپیوتر | امنیت</span>
+                    <span class="badge">AI · Web3 · Future Tech</span>
+                </div>
+                <p>
+                    اینجا جایی است که ایده‌ها به محصول، و محصول‌ها به تجربه‌ای حرفه‌ای تبدیل می‌شوند.
+                    آرکادیا برای ساختن آینده‌ی دیجیتال طراحی شده؛ دقیق، مدرن و پرقدرت.
+                </p>
+                <div class="cta-row">
+                    <a href="#founder" class="btn btn-primary">مشاهده معرفی</a>
+                    
+                </div>
+            </div>
+
+            <div class="profile-card">
+                <div class="profile-frame" id="profileFrame">
+                    <!--
+                      عکس خودت را اینجا بگذار:
+                      1) فایل را کنار همین HTML قرار بده
+                      2) نام src را عوض کن
+                    -->
+                    <img src="uploads/logo/katya.jpg" alt="عکس کاتیا" onerror="this.style.display='none'; document.getElementById('profileFrame').classList.remove('has-image')">
+                    <div class="profile-placeholder">
+                        جای عکس شما اینجاست<br>
+                        عکس را با یک فایل واقعی جایگزین کن<br>
+                        مثل: <code>my-photo.jpg</code>
+                    </div>
+                </div>
+                <div class="profile-caption"></div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Stars
+        const starContainer = document.getElementById("starContainer");
+        for (let i = 0; i < 120; i++) {
+            const star = document.createElement("div");
+            star.className = "star";
+            star.style.left = Math.random() * 100 + "%";
+            star.style.top = Math.random() * 100 + "%";
+            star.style.animationDelay = (Math.random() * 4).toFixed(2) + "s";
+            star.style.opacity = (Math.random() * 0.7 + 0.1).toFixed(2);
+            starContainer.appendChild(star);
+        }
+
+        // Mobile menu
+        const hamburger = document.getElementById("hamburger");
+        const menu = document.getElementById("menu");
+
+        hamburger.addEventListener("click", () => {
+            const isOpen = menu.classList.toggle("active");
+            hamburger.setAttribute("aria-expanded", isOpen ? "true" : "false");
+        });
+
+        document.addEventListener("click", (e) => {
+            if (!menu.contains(e.target) && !hamburger.contains(e.target)) {
+                menu.classList.remove("active");
+                hamburger.setAttribute("aria-expanded", "false");
+            }
+        });
+
+        // Close menu after click on mobile
+        menu.querySelectorAll("a").forEach(link => {
+            link.addEventListener("click", () => {
+                menu.classList.remove("active");
+                hamburger.setAttribute("aria-expanded", "false");
+            });
+        });
+
+        // If image loads successfully, hide placeholder
+        const profileImg = document.querySelector(".profile-frame img");
+        const profileFrame = document.getElementById("profileFrame");
+        if (profileImg && profileImg.complete && profileImg.naturalWidth > 0) {
+            profileFrame.classList.add("has-image");
+        } else if (profileImg) {
+            profileImg.addEventListener("load", () => {
+                profileFrame.classList.add("has-image");
+            });
+        }
+    </script>
+</body>
+</html>

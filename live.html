@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>آرکادیاس | پخش زنده</title>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;700;900&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: "Vazirmatn", sans-serif;
+      background-color: #030712;
+      background-image:
+        radial-gradient(circle at 20% 20%, #0b224e, transparent 40%),
+        radial-gradient(circle at 80% 10%, #0c214f, transparent 40%);
+      color: white;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ───── ستاره‌ها ───── */
+    .stars { position: fixed; inset: 0; z-index: -1; pointer-events: none; }
+    .star {
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+      opacity: .8;
+      box-shadow: 0 0 8px #4ea1ff;
+      animation: starMove 6s ease-in-out infinite;
+    }
+    @keyframes starMove {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-15px); }
+    }
+
+    /* ───── هدر ───── */
+    header {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 95%;
+      max-width: 1200px;
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+      padding: 14px 28px;
+      z-index: 1000;
+    }
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 22px;
+      font-weight: 900;
+      color: white;
+      text-decoration: none;
+    }
+    .brand-logo {
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #2f80ff, #00c6ff);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; font-weight: 900;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      list-style: none;
+    }
+    .nav-links a {
+      color: #d1d5db;
+      font-size: 15px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: color .2s;
+    }
+    .nav-links a:hover,
+    .nav-links a.active { color: #38bdf8; }
+    .btn-login {
+      background: #38bdf8;
+      color: #030712;
+      border: none;
+      border-radius: 50px;
+      padding: 10px 25px;
+      font-family: "Vazirmatn", sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      transition: box-shadow .2s, transform .2s;
+    }
+    .btn-login:hover {
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.6);
+      transform: scale(1.05);
+    }
+    .menu-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+    }
+    .menu {
+      display: none;
+      position: fixed;
+      top: 80px;
+      right: 20px;
+      width: 220px;
+      background: rgba(15, 23, 42, 0.95);
+      border-radius: 20px;
+     top: 80px;
+      right: 20px;
+      width: 220px;
+      background: rgba(15, 23, 42, 0.95);
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 20px;
+      z-index: 999;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .menu.active { display: flex;size: 15px;
+      transition: color .2s;
+    }
+    .menu a:hover { color: #38bdf8; }
+
+    /* ───── محتوای اصلی ───── */
+    main { padding-top: 120px; padding-bottom: 60px; }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+    /* ───── بخش عنوان ───── */
+    .section-header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+    .section-badge {
+      display: inline-block;
+      background: rgba(56, 189, 248, 0.1);
+      color: #38bdf8;
+      padding: 6px 18px;
+      border-radius: 50px;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      border: 1px solid rgba(56, 189, 248, 0.2);
+    }
+    .section-title {
+      font-size: 45px;
+      font-weight: 900;
+      line-height: 1.3;
+      background: linear-gradient(135deg, #ffffff, #38bdf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 16px;
+    }
+    .section-desc {
+      color: #d1d5db;
+      font-size: 17px;
+      opacity: 0.8;
+      max-width: 560px;
+      margin: 0 auto;
+      line-height: 1.8;
+    }
+
+    /* ───── لایو فعال ───── */
+    .live-featured {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 30px;
+      overflow: hidden;
+      margin-bottom: 50px;
+    }
+    .live-player {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: rgba(255,2rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 30px;
+      overflow: hidden;
+      margin-bottom: 50px;
+    }
+    .live-player {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: rgba(255,255,255,0.05);
+      border-bottom: 1px solid idth: 72px; height: 72px;
+    }
+    .live-player-placeholder span {
+      font-size: 15px;
+      color: #d1d5db;
+    }
+    .live-badge {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: #f87171;
+      border-radius: 50px;
+      padding: 6px 14px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .live-dot {
+      width: 8px; height: 8px;
+      background: #ef4444;
+      border-radius: 50%;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(239,68,68,0.6); }
+      50%       { box-shadow: 0 0 0 8px rgba(239,68,68,0); }
+    }
+    .viewer-count {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(15,23,42,0.7);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 50px;
+      padding: 6px 14px;
+      font-size: 13px;
+      color: #d1d5db;
+    }
+    .live-info {
+      padding: 28px 32px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .live-meta { flex: 1; min-width: 0; }
+    .live-category {
+      display: inline-block;
+      background: rgba(47, 128, 255, 0.12);
+      color: #2f80ff;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+    .live-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+    .live-host {
+      color: #d1d5db;
+      font-size: 14px;
+      opacity: 0.75;
+    }
+    .live-actions {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #2f80ff, #00c6ff);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: 12px 28px;
+      font-family: "Vazirmatn", sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: box-shadow .2s, transform .2s;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn-primary:hover {
+      box-shadow: 0 10px 30px rgba(47, 128, 255, 0.4);
+      transform: translateY(-2px);
+    }
+    .btn-secondary {
+      background: rgba(255,255,255,0.06);
+      color: #d1d5db;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 50px;
+      padding: 12px 22px;
+      font-family: "Vazirmatn", sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .2s, border-color .2s;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn-secondary:hover {
+      background: rgba(255,255,255,0.1);
+      border-color: rgba(255,255,255,0.22);
+    }
+
+    /* ───── گرید لایوهای آینده ───── */
+    .upcoming-title {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 28px;
+      color: white;
+    }
+    .upcoming-title span {
+      color: #38bdf8;
+    }
+    .live-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-bottom: 60px;
+    }
+    .live-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 24px;
+      overflow: hidden;
+      transition: border-color .25s, transform .25s, box-shadow .25s;
+      cursor: pointer;
+    }
+    .live-card:hover {
+      border-color: rgba(56, 189, 248, 0.3);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 40px rgba(47, 128, 255, 0.15);
+    }
+    .card-thumb {
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: rgba(255,255,255,0.05);
+      border: 1px dashed rgba(255,255,255,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .card-thumb svg {
+      width: 40px; height: 40px;
+      opacity: 0.3;
+    }
+    .card-time-badge {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      background: rgba(15,23,42,0.85);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 20px;
+      padding: 4px 10px;
+      font-size: 12px;
+      color: #d1d5db;
+    }
+    .card-body { padding: 18px 20px 22px; }
+    .card-cat {
+      font-size: 12px;
+      font-weight: 600;
+      color: #38bdf8;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 8px;
+      line-height: 1.5;
+    }
+    .card-instructor {
+      font-size: 13px;
+      color: #d1d5db;
+      opacity: 0.65;
+    }
+
+    /* ───── آرشیو ───── */
+    .archive-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .archive-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 20px;
+      overflow: hidden;
+      transition: border-color .2s, transform .2s;
+    }
+    .archive-card:hover {
+      border-color: rgba(47, 128, 255, 0.3);
+      transform: translateY(-3px);
+    }
+    .archive-thumb {
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: rgba(255,255,255,0.04);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      position: relative;
+    }
+    .archive-thumb svg {
+      width: 36px; height: 36px;
+      opacity: 0.25;
+    }
+    .archive-duration {
+      position: absolute;
+      bottom: 8px;
+      left: 10px;
+      background: rgba(0,0,0,0.6);
+      border-radius: 12px;
+      padding: 3px 8px;
+      font-size: 11px;
+      color: #d1d5db;
+    }
+    .archive-body { padding: 16px 18px 20px; }
+    .archive-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 6px;
+      line-height: 1.5;
+    }
+    .archive-meta {
+      font-size: 12px;
+      color: #d1d5db;
+      opacity: 0.6;
+      display: flex;
+      gap: 10px;
+    }
+
+    /* ───── فوتر ───── */
+    footer {
+      background: #02050b;
+      padding: 80px 20px 30px;
+      margin-top: 100px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .footer-grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 48px;
+      margin-bottom: 48px;
+    }
+    .footer-col h4 {
+      font-size: 16px;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 20px;
+    }
+    .footer-col ul { list-style: none; }
+    .footer-col ul li { margin-bottom: 12px; }
+    .footer-col ul li a {
+      color: #d1d5db;
+      text-decoration: none;
+      font-size: 14px;
+      opacity: 0.7;
+      transition: opacity .2s, color .2s;
+    }
+    .footer-col ul li a:hover { opacity: 1; color: #38bdf8; }
+    .footer-brand-desc {
+      color: #d1d5db;
+      font-size: 14px;
+      opacity: 0.65;
+      line-height: 1.8;
+      margin-top: 12px;
+    }
+    .footer-bottom {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      text-align: center;
+      color: #d1d5db;
+      font-size: 13px;
+      opacity: 0.5;
+    }
+
+    /* ───── ریسپانسیو ───── */
+    @media (max-width: 768px) {
+      .nav-links, .btn-login { display: none; }
+      .menu-toggle { display: block; }
+
+      .section-title { font-size: 28px; }
+
+      .live-grid,
+      .archive-grid {
+        grid-template-columns: 1fr;
+        gap: 18px;
+      }
+
+      .live-info { flex-direction: column; }
+      .live-actions { width: 100%; }
+      .live-actions .btn-primary,
+      .live-actions .btn-secondary { flex: 1; text-align: center; }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="stars" id="starContainer"></div>
+
+  <!-- هدر -->
+  <header>
+    <nav class="nav" role="navigation" aria-label="منوی اصلی">
+      <a href="index.html" class="brand" aria-label="آرکادیاس - صفحه اصلی">
+        <div class="brand-logo" aria-hidden="true">A</div>
+        آرکادیاس
+      </a>
+      <ul class="nav-links" role="list">
+        <li><a href="index.html">خانه</a></li>
+        <li><a href="story.html">داستان ما</a></li>
+        <li><a href="amooozesh.html">آموزش</a></li>
+        <li><a href="mo.html">مسابقات</a></li>
+        <li><a href="nagh.html">نقشه‌راه</a></li>
+        <li><a href="live.html" class="active" aria-current="page">لایو</a></li>
+      </ul>
+      <a href="#" class="btn-login">ورود / ثبت‌نام</a>
+      <button class="menu-toggle" id="menuToggle" aria-label="باز کردن منو" aria-expanded="false" aria-controls="mobileMenu">☰</button>
+    </nav>
+  </header>
+
+  <!-- منوی موبایل -->
+  <nav class="menu" id="mobileMenu" aria-label="منوی موبایل">
+    <a href="index.html">خانه</a>
+    <a href="story.html">داستان ما</a>
+    <a href="amooozesh.html">آموزش</a>
+    <a href="mo.html">مسابقات</a>
+    <a href="nagh.html">نقشه‌راه</a>
+    <a href="live.html" aria-current="page">لایو</a>
+    <a href="#">ورود / ثبت‌نام</a>
+  </nav>
+
+  <main>
+    <div class="container">
+
+      <!-- عنوان صفحه -->
+      <div class="section-header">
+        <div class="section-badge">📡 پخش زنده</div>
+        <h1 class="section-title">لایو آرکادیاس</h1>
+        <p class="section-desc">
+          جلسات زنده آموزشی، نشست‌های تخصصی و رویدادهای ویژه — همه در یک جا
+        </p>
+      </div>
+
+      <!-- لایو اصلی در حال پخش -->
+      <section class="live-featured" aria-label="لایو در حال پخش">
+        <div class="live-player">
+          <div class="live-player-placeholder" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="1.5">
+              <rect x="2" y="3" width="20" height="14" rx="3"/>
+              <path d="M8 21h8M12 17v4"/>
+            </svg>
+            <span>پخش زنده در حال آماده‌سازی است</span>
+          </div>
+          <div class="live-badge" aria-label="در حال پخش زنده">
+            <div class="live-dot" aria-hidden="true"></div>
+            LIVE
+          </div>
+          <div class="viewer-count" aria-label="تعداد بینندگان">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+    svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+           با یونیتی</div>
+            <h2 class="live-title">ساخت بازی موبایل از صفر تا انتشار — جلسه پنجم</h2>
+            <p class="live-host">مدرس: استاد محمد رضایی &nbsp;·&nbsp; شروع: ۱۴:۰۰</p>
+          </div>
+          <div class="live-actions">
+            <a href="#" class="btn-primary">پیوستن به لایو</a>
+            <a href="#" class="btn-secondary">یادآوری</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- لایوهای آینده -->
+      <section aria-labelledby="upcoming-heading">
+        <h2 class="upcoming-title" id="upcoming-heading">جلسات <span>آینده</span></h2>
+        <div class="live-grid">
+
+          <article class="live-card" tabindex="0">
+            <div class="card-thumb" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="1.5">
+                <rect x="2" y="3" width="20" height="14" rx="3"/>
+                <path d="M8 21h8M12 17v4"/>
+              </svg>
+              <span class="card-time-badge">فردا ۱۶:۰۰</span>
+            </div>
+            <div class="card-body">
+              <div class="card-cat">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="12" r="5"/></svg>
+                طراحی UI/UX
+              </div>
+              <h3 class="card-title">اصول طراحی تجربه کاربری در اپلیکیشن‌های موبایل</h3>
+              <p class="card-instructor">استاد سارا احمدی</p>
+            </div>
+          </article>
+
+          <article class="live-card" tabindex="0">
+            <div class="card-thumb" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="1.5">
+                <rect x="2" y="3" width="20" height="14" rx="3"/>
+                <path d="M8 21h8M12 17v4"/>
+              </svg>
+              <span class="card-time-badge">دوشنبه ۲۰:۰۰</span>
+            </div>
+    " height="14" rx="3"/>
+                <path d="M8 21h8M12 17v4"/>
+              </svg>
+              <span class="card-time-badge">دوشنبه ۲۰:۰۰</span>
+            </div>
+            <div class="card-body">
+              <div class="card-cat">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="12API با Node.js و Express — ادامه سری</h3>
+              <p class="card-instructor">استاد علی کریمی</p>
+            </div>
+          </article>
+
+          <article class="live-card" tabindex="0">
+            <div class="card-thumb" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="1.5">
+                <rect x="2" y="3" width="20" height="14" rx="3"/>
+                <path d="M8 21h8M12 17v4"/>
+              </svg>
+              <span class="card-time-badge">سه‌شنبه ۱۸:۳۰</span>
+            </div>
+            <div class="card-body">
+              <div class="card-cat">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="12" r="5"/></svg>
+                هوش مصنوعی
+              </div>
+              <h3 class="card-title">مقدمه‌ای بر یادگیری ماشین با پایتون</h3>
+              <p class="card-instructor">استاد نیلوفر نوری</p>
+            </div>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- آرشیو لایوهای قبلی -->
+      <section aria-labelledby="archive-heading">
+        <h2 class="upcoming-title" id="archive-heading">آرشیو <span>لایوها</span></h2>
+        <div class="archive-grid">
+
+          <article class="archive-card">
+            <div class="archive-thumb" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="1.5">
+                <polygon points="5 3 19 12 5 21 5 3"/>
+              </svg>
+              <span class="archive-duration">۱:۲۲:۴۵</span>
+            </div>
+            <div class="archive-body">
+              <h3 class="archive-title">مقدمه Unity — جلسه اول</h3>
+              <div class="archive-meta">
+                <span>۱۴۰۵/۰۵/۱۵</span>
+                <span>·</span>
+                <span>۸۵۴ بازدید</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="archive-card">
+            <div class="archive-thumb" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="1.5">
+                <polygon points="5 3 19 12 5 21 5 3"/>
+              </svg>
+              <span class="archive-duration">۲:۰۵:۱۸</span>
+            </div>
+            <div class="archive-body">
+              <h3 class="archive-title">فیزیک و کنترل کاراکتر در Unity — جلسه دوم</h3>
+              <div class="archive-meta">
+                <span>۱۴۰۵/۰۵/۲۲</span>
+                <span>·</span>
+                <span>۷۳۱ بازدید</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="archive-card">
+            <div class="archive-thumb" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="1.5">
+                <polygon points="5 3 19 12 5 21 5 3"/>
+              </svg>
+              <span class="archive-duration">۱:۴۸:۳۰</span>
+            </div>
+            <div class="archive-body">
+              <h3 class="archive-title">طراحی UI داخل بازی — جلسه سوم</h3>
+              <div class="archive-meta">
+                <span>۱۴۰۵/۰۵/۲۹</span>
+                <span>·</span>
+                <span>۶۱۹ بازدید</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="archive-card">
+            <div class="archive-thumb" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="1.5">
+                <polygon points="5 3 19 12 5 21 5 3"/>
+              </svg>
+              <span class="archive-duration">۱:۵۵:۰۲</span>
+            </div>
+            <div class="archive-body">
+              <h3 class="archive-title">مدیریت حافظه و بهینه‌سازی — جلسه چهارم</h3>
+              <div class="archive-meta">
+                <span>۱۴۰۵e">مدیریت حافظه و بهینه‌سازی — جلسه چهارم</h3>
+              <div class="archive-meta">
+                <span>۱۴۰۵/۰۶/۰۵</span>
+                <span>·</span>
+                <span>۵۸۳ با1 5 3"/>
+              </svg>
+              <span class="archive-duration">۰:۵۸:۱۴</span>
+            </div>
+            <div class="archive-body">
+              <h3 class="archive-title">جلسه پرسش و پاسخ ویژه — UI/UX</h3>
+              <div class="archive-meta">
+                <span>۱۴۰۵/۰۶/۰۱</span>
+                <span>·</span>
+                <span>۴۴۰ بازدید</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="archive-card">
+            <div class="archive-thumb" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="1.5">
+                <polygon points="5 3 19 12 5 21 5 3"/>
+              </svg>
+              <span class="archive-duration">۱:۳۳:۴۷</span>
+            </div>
+            <div class="archive-body">
+              <h3 class="archive-title">معرفی پایتون برای مبتدیان — جلسه اول</h3>
+              <div class="archive-meta">
+                <span>۱۴۰۵/۰۵/۱۰</span>
+                <span>·</span>
+                <span>۱٬۱۲۳ بازدید</span>
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- فوتر -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-col">
+        <div class="brand" style="margin-bottom:16px; display:inline-flex;">
+          <div class="brand-logo" style="margin-left:10px;">A</div>
+          آرکادیاس
+        </div>
+        <p class="footer-brand-desc">
+          آرکادیاس پلتفرم آموزشی تخصصی در حوزه فناوری، بازی‌سازی و طراحی است.
+          هدف ما ساختن نسل بعدی خالقان دیجیتال ایران است.
+        </p>
+      </div>
+      <div class="footer-col">
+        <h4>دسترسی سریع</h4>
+        <ul>
+          <li><a href="index.html">صفحه اصلی</a></li>
+          <li><a href="amooozesh.html">دوره‌های آموزشی</a></li>
+          <li><a href="mo.html">مسابقات</a></li>
+          <li><a href="live.html">پخش زنده</a></li>
+          <li><a href="story.html">درباره ما</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>ارتباط با ما</h4>
+        <ul>
+          <li><a href="#" rel="noopener">تلگرام</a></li>
+          <li><a href="#" rel="noopener">اینستاگرام</a></li>
+          <li><a href="mailto:info@arcadia.ir">ایمیل</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© ۱۴۰۵ آرکادیاس | تمام حقوق برای مجموعه آرکادیا محفوظ است.</p>
+    </div>
+  </footer>
+
+  <script>
+    // ─── ستاره‌سازی ───
+    const container = document.getElementById('starContainer');
+    for (let i = 0; i < 160; i++) {
+      const star = document.createElement('div');
+      star.className = 'star';
+      const size = Math.random() * 3 + 1;
+      star.style.cssText = `
+        width: ${size}px;
+        height: ${size}px;
+        top: ${Math.random() * 100}%;
+        left: ${Math.random() * 100}%;
+        animation-duration: ${Math.random() * 5 + 4}s;
+        animation-delay: ${Math.random() * 6}s;
+      `;
+      container.appendChild(star);
+    }
+
+    // ─── منوی موبایل ───
+    const toggle = document.getElementById('menuToggle');
+    const menu   = document.getElementById('mobileMenu');
+    toggle.addEventListener('click', () => {
+      const open = menu.classList.toggle('active');
+      toggle.setAttribute('aria-expanded', open);
+      toggle.textContent = open ? '✕' : '☰';
+    });
+
+    // بستن منو با کلیک بیرون
+    document.addEventListener('click', (e) => {
+      if (!menu.contains(e.target) && e.target !== toggle) {
+        menu.classList.remove('active');
+        toggle.setAttribute('aria-expanded', 'false');
+        toggle.textContent = '☰';
+      }
+    });
+  </script>
+</body>
+</html>

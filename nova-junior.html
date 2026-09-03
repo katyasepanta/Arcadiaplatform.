@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-select=no" />
+  <title>آرکادیا ماینر: ماجراجویی نوا جونیور | Arcadia Miner</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-dark: #030712;
+      --card-bg: rgba(15, 23, 42, 0.75);
+      --accent-cyan: #00e5ff;
+      --accent-purple: #a855f7;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --energy-color: #22c55e;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
+    }
+
+    body {
+      font-family: 'Vazirmatn', sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      overflow-x: hidden;
+      position: relative;
+      background-image: 
+        radial-gradient(circle at 50% 20%, rgba(0, 229, 255, 0.12) 0%, transparent 50%),
+        radial-gradient(circle at 50% 80%, rgba(168, 85, 247, 0.12) 0%, transparent 50%);
+    }
+
+    /* هدر */
+    header {
+      width: 100%;
+      max-width: 480px;
+      padding: 20px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 10;
+    }
+
+    .back-btn {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      transition: all 0.2s ease;
+    }
+
+    .back-btn:hover {
+      color: var(--accent-cyan);
+      border-color: var(--accent-cyan);
+    }
+
+    .level-badge {
+      background: linear-gradient(135deg, rgba(0, 229, 255, 0.15), rgba(168, 85, 247, 0.15));
+      border: 1px solid rgba(0, 229, 255, 0.3);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent-cyan);
+    }
+
+    /* کانتینر اصلی */
+    .game-container {
+      width: 100%;
+      max-width: 480px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 20px;
+      z-index: 5;
+    }
+
+    .title-area {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .title-area h1 {
+      font-size: 24px;
+      font-weight: 900;
+      background: linear-gradient(135deg, #00e5ff, #c084fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 6px;
+    }
+
+    .title-area p {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    /* باکس نمایش امتیاز */
+    .score-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 30px;
+      background: var(--card-bg);
+      padding: 12px 28px;
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    }
+
+    .score-icon {
+      font-size: 26px;
+    }
+
+    .score-value {
+      font-size: 36px;
+      font-weight: 900;
+      color: #ffffff;
+      letter-spacing: 1px;
+    }
+
+    .score-unit {
+      font-size: 14px;
+      color: var(--accent-cyan);
+      font-weight: 700;
+    }
+
+    /* دکمه تپ نوا جونیور */
+    .tap-wrapper {
+      position: relative;
+      margin-bottom: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .glow-effect {
+      position: absolute;
+      width: 250px;
+      height: 250px;
+      background: radial-gradient(circle, rgba(0, 229, 255, 0.25) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+      animation: pulseGlow 3s infinite alternate;
+    }
+
+    @keyframes pulseGlow {
+      0% { transform: scale(0.9); opacity: 0.5; }
+      100% { transform: scale(1.15); opacity: 0.9; }
+    }
+
+    .tap-btn {
+      width: 210px;
+      height: 210px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, #0f172a, #1e293b);
+      border: 3px solid rgba(0, 229, 255, 0.4);
+      padding: 8px;
+      cursor: pointer;
+      position: relative;
+      box-shadow: 0 0 30px rgba(0, 229, 255, 0.25), inset 0 0 15px rgba(0, 0, 0, 0.8);
+      transition: transform 0.08s ease;
+      touch-action: manipulation;
+    }
+
+    .tap-btn:active {
+      transform: scale(0.94);
+    }
+
+    .tap-btn img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    /* افکت عدد شناور +10 */
+    .float-score {
+      position: absolute;
+      font-size: 24px;
+      font-weight: 900;
+      color: var(--accent-cyan);
+      text-shadow: 0 0 12px rgba(0, 229, 255, 0.8);
+      pointer-events: none;
+      animation: floatUp 0.8s ease-out forwards;
+      z-index: 50;
+    }
+
+    @keyframes floatUp {
+      0% {
+        opacity: 1;
+        transform: translate(-50%, 0) scale(1);
+      }
+      100% {
+        opacity: 0;
+        transform: translate(-50%, -100px) scale(1.4);
+      }
+    }
+
+    /* بخش انرژی و فوتر */
+    .bottom-bar {
+      width: 100%;
+      max-width: 480px;
+      padding: 20px 24px;
+      margin-bottom: 12px;
+      z-index: 10;
+    }
+
+    .energy-wrapper {
+      background: var(--card-bg);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 14px 18px;
+      border-radius: 18px;
+    }
+
+    .energy-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      margin-bottom: 8px;
+      color: var(--text-muted);
+    }
+
+    .energy-progress-bg {
+      width: 100%;
+      height: 10px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 5px;
+      overflow: hidden;
+    }
+
+    .energy-progress-fill {
+      height: 100%;
+      width: 100%;
+      background: linear-gradient(90deg, #10b981, #00e5ff);
+      border-radius: 5px;
+      transition: width 0.2s ease;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- هدر بالا -->
+  <header>
+    <a href="index.html" class="back-btn">
+      <span>←</span> برگشت به سایت
+    </a>
+    <div class="level-badge" id="levelName">ماینر مبتدی ⚡</div>
+  </header>
+
+  <!-- کانتینر گیم -->
+  <main class="game-container">
+    <div class="title-area">
+      <h1>آرکادیا ماینر</h1>
+      <p>ماجراجویی استخراج توکن با نوا جونیور</p>
+    </div>
+
+    <!-- باکس نمایش سکه‌ها -->
+    <div class="score-container">
+      <span class="score-icon">💎</span>
+      <span class="score-value" id="score">0</span>
+      <span class="score-unit">ARC</span>
+    </div>
+
+    <!-- دکمه تپ -->
+    <div class="tap-wrapper" id="tapWrapper">
+      <div class="glow-effect"></div>
+      <div class="tap-btn" id="tapBtn">
+        <img src="uploads/logo/novaj.jpg" alt="Nova Junior" />
+      </div>
+    </div>
+  </main>
+
+  <!-- نوار انرژی پایین -->
+  <div class="bottom-bar">
+    <div class="energy-wrapper">
+      <div class="energy-header">
+        <span>⚡ ظرفیت استخراج</span>
+        <span><strong id="energyText" style="color: #fff;">1000</strong> / 1000</span>
+      </div>
+      <div class="energy-progress-bg">
+        <div class="energy-progress-fill" id="energyFill"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const POINTS_PER_TAP = 10;
+    const MAX_ENERGY = 1000;
+    const ENERGY_PER_TAP = 1;
+    const RECHARGE_SPEED_MS = 1500; // هر ۱.۵ ثانیه ۱ انرژی اضافه می‌شه
+
+    // لود مقادیر از حافظه مرورگر
+    let score = parseInt(localStorage.getItem('arcadia_miner_score')) || 0;
+    let energy = parseInt(localStorage.getItem('arcadia_miner_energy'));
+    if (isNaN(energy)) energy = MAX_ENERGY;
+
+    const scoreEl = document.getElementById('score');
+    const energyTextEl = document.getElementById('energyText');
+    const energyFillEl = document.getElementById('energyFill');
+    const levelNameEl = document.getElementById('levelName');
+    const tapBtn = document.getElementById('tapBtn');
+    const tapWrapper = document.getElementById('tapWrapper');
+
+    function updateUI() {
+      scoreEl.innerText = score.toLocaleString('fa-IR');
+      energyTextEl.innerText = energy.toLocaleString('fa-IR');
+      const percentage = (energy / MAX_ENERGY) * 100;
+      energyFillEl.style.width = percentage + '%';
+
+      // تعیین لول بر اساس امتیاز
+      if (score >= 50000) {
+        levelNameEl.innerText = 'ماینر افسانه‌ای 👑';
+      } else if (score >= 10000) {
+        levelNameEl.innerText = 'ماینر سایبری 🚀';
+      } else if (score >= 2000) {
+        levelNameEl.innerText = 'ماینر پیشرفته ⚙️';
+      } else {
+        levelNameEl.innerText = 'ماینر مبتدی ⚡';
+      }
+    }
+
+    function handleTap(clientX, clientY) {
+      if (energy < ENERGY_PER_TAP) return;
+
+      score += POINTS_PER_TAP;
+      energy -= ENERGY_PER_TAP;
+
+      localStorage.setItem('arcadia_miner_score', score);
+      localStorage.setItem('arcadia_miner_energy', energy);
+
+      updateUI();
+      createFloatText(clientX, clientY);
+    }
+
+    function createFloatText(x, y) {
+      const floatEl = document.createElement('div');
+      floatEl.className = 'float-score';
+      floatEl.innerText = `+${POINTS_PER_TAP}`;
+
+      const rect = tapWrapper.getBoundingClientRect();
+      floatEl.style.left = (x - rect.left) + 'px';
+      floatEl.style.top = (y - rect.top) + 'px';
+
+      tapWrapper.appendChild(floatEl);
+
+      setTimeout(() => {
+        floatEl.remove();
+      }, 800);
+    }
+
+    // رویداد تاچ گوشی (پشتیبانی از مولتی تاچ)
+    tapBtn.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      for (let i = 0; i < e.touches.length; i++) {
+        const touch = e.touches[i];
+        handleTap(touch.clientX, touch.clientY);
+      }
+    }, { passive: false });
+
+    // رویداد کلیک ماوس
+    tapBtn.addEventListener('mousedown', (e) => {
+      handleTap(e.clientX, e.clientY);
+    });
+
+    // شارژ خودکار انرژی
+    setInterval(() => {
+      if (energy < MAX_ENERGY) {
+        energy = Math.min(MAX_ENERGY, energy + 1);
+        localStorage.setItem('arcadia_miner_energy', energy);
+        updateUI();
+      }
+    }, RECHARGE_SPEED_MS);
+
+    // راه‌اندازی اولیه
+    updateUI();
+  </script>
+</body>
+</html>

@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#030712" />
+    <title>داستان آرکادیا | Arcadia Platform</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-Variable-font-face.css"
+        rel="stylesheet"
+    />
+
+    <style>
+        :root {
+            --bg: #030712;
+            --bg-secondary: #0b1220;
+            --panel: rgba(15, 23, 42, 0.62);
+            --panel-hover: rgba(20, 32, 56, 0.78);
+            --text: #e5e7eb;
+            --muted: #94a3b8;
+            --primary: #2f80ff;
+            --primary-light: #00c6ff;
+            --border: rgba(255, 255, 255, 0.08);
+            --shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: var(--text);
+            font-family: "Vazirmatn", sans-serif;
+            background:
+                radial-gradient(circle at top, rgba(47, 128, 255, 0.14), transparent 28%),
+                radial-gradient(circle at bottom left, rgba(0, 198, 255, 0.08), transparent 25%),
+                linear-gradient(180deg, var(--bg), var(--bg-secondary));
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* ===============================
+           پس‌زمینه ستاره‌ای
+        =============================== */
+        .stars {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            border-radius: 50%;
+            background: #ffffff;
+            animation: twinkle 4s infinite ease-in-out;
+        }
+
+        @keyframes twinkle {
+            0%,
+            100% {
+                opacity: 0.12;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.95;
+                transform: scale(1.7);
+            }
+        }
+
+        /* ===============================
+           هدر
+        =============================== */
+        header {
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 0;
+            z-index: 1000;
+            width: 100%;
+            background: rgba(3, 7, 18, 0.74);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            max-width: 1240px;
+            margin: 0 auto;
+            padding: 16px 24px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #ffffff;
+            font-size: 1.1rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+
+        .logo {
+            width: 38px;
+            height: 38px;
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            box-shadow: 0 10px 25px rgba(47, 128, 255, 0.28);
+            object-fit: cover;
+        }
+
+        .menu {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+            list-style: none;
+        }
+
+        .menu a {
+            position: relative;
+            padding: 7px 0;
+            color: var(--muted);
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .menu a::after {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            width: 0;
+            height: 2px;
+            border-radius: 99px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            content: "";
+            transition: width 0.3s ease;
+        }
+
+        .menu a:hover,
+        .menu a.active-link {
+            color: #ffffff;
+        }
+
+        .menu a:hover::after,
+        .menu a.active-link::after {
+            width: 100%;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .login {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 18px;
+            border: 1px solid rgba(47, 128, 255, 0.3);
+            border-radius: 999px;
+            color: #ffffff;
+            background: linear-gradient(
+                135deg,
+                rgba(47, 128, 255, 0.16),
+                rgba(0, 198, 255, 0.14)
+            );
+            font-size: 0.92rem;
+            font-weight: 700;
+            white-space: nowrap;
+            transition: 0.3s ease;
+        }
+
+        .login:hover {
+            border-color: rgba(0, 198, 255, 0.5);
+            box-shadow: 0 10px 28px rgba(47, 128, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .hamburger {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.04);
+            font-size: 1.25rem;
+            cursor: pointer;
+            transition: 0.3s ease;
+        }
+
+        .hamburger:hover {
+            background: rgba(255, 255, 255, 0.09);
+        }
+
+        /* ===============================
+           بخش اصلی داستان
+        =============================== */
+        main {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero {
+            max-width: 1240px;
+            min-height: 100vh;
+            margin: 0 auto;
+            padding: 180px 24px 100px;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            align-items: center;
+            gap: 48px;
+            min-height: calc(100vh - 180px);
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            padding: 8px 14px;
+            margin-bottom: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 999px;
+            color: #bfdbfe;
+            background: rgba(255, 255, 255, 0.05);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .hero h1 {
+            margin-bottom: 18px;
+            color: #ffffff;
+            font-size: clamp(2.3rem, 4.3vw, 4.5rem);
+            line-height: 1.22;
+        }
+
+        .hero-description {
+            max-width: 700px;
+            margin-bottom: 30px;
+            color: #cbd5e1;
+            font-size: 1.05rem;
+            line-height: 2.15;
+        }
+
+        .hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 22px;
+            border-radius: 14px;
+            font-weight: 700;
+            transition: 0.3s ease;
+        }
+
+        .btn-primary {
+            color: #ffffff;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            box-shadow: 0 18px 34px rgba(47, 128, 255, 0.26);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+        }
+
+        .btn-secondary {
+            border: 1px solid var(--border);
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.09);
+            transform: translateY(-3px);
+        }
+
+        /* کارت عکس */
+        .story-card {
+            padding: 18px;
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            background: linear-gradient(
+                180deg,
+                rgba(15, 23, 42, 0.8),
+                rgba(15, 23, 42, 0.58)
+            );
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(12px);
+        }
+
+        .story-frame {
+            position: relative;
+            aspect-ratio: 1 / 1.1;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            border-radius: 22px;
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .story-frame img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .story-placeholder {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            color: #cbd5e1;
+            background:
+                linear-gradient(145deg, rgba(47, 128, 255, 0.14), rgba(0, 198, 255, 0.08)),
+                rgba(255, 255, 255, 0.03);
+            text-align: center;
+            font-size: 0.96rem;
+            line-height: 2;
+        }
+
+        .story-frame.has-image .story-placeholder {
+            display: none;
+        }
+
+        .story-caption {
+            margin-top: 14px;
+            color: #cbd5e1;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        /* ===============================
+           متن داستان
+        =============================== */
+        .content {
+            max-width: 1240px;
+            margin: 0 auto;
+            padding: 0 24px 110px;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            align-items: start;
+            gap: 32px;
+        }
+
+        .panel {
+            padding: 28px;
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            background: var(--panel);
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(10px);
+        }
+
+        .panel h2 {
+            margin-bottom: 17px;
+            color: #ffffff;
+            font-size: 1.7rem;
+        }
+
+        .panel p {
+            margin-bottom: 16px;
+            color: #cbd5e1;
+            font-size: 1rem;
+            line-height: 2.15;
+        }
+
+        .highlight {
+            padding: 15px 17px;
+            margin-top: 20px;
+            border: 1px solid rgba(47, 128, 255, 0.18);
+            border-radius: 18px;
+            color: #dbeafe;
+            background: rgba(47, 128, 255, 0.09);
+            line-height: 2;
+        }
+
+        .list {
+            display: grid;
+            gap: 12px;
+            margin-top: 18px;
+        }
+
+        .list-item {
+            padding: 14px 16px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            color: #e2e8f0;
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        /* ===============================
+           نقشه تکامل آرکادیا
+        =============================== */
+        .roadmap-section {
+            max-width: 1240px;
+            margin: 0 auto;
+            padding: 0 24px 110px;
+        }
+
+        .section-heading {
+            max-width: 760px;
+            margin-bottom: 42px;
+        }
+
+        .section-kicker {
+            display: inline-block;
+            margin-bottom: 12px;
+            color: #93c5fd;
+            font-size: 0.92rem;
+            font-weight: 800;
+        }
+
+        .section-heading h2 {
+            margin-bottom: 14px;
+            color: #ffffff;
+            font-size: clamp(2rem, 3vw, 3rem);
+        }
+
+        .section-heading p {
+            color: var(--muted);
+            line-height: 2.05;
+        }
+
+        .roadmap {
+            position: relative;
+            display: grid;
+            gap: 22px;
+        }
+
+        .roadmap::before {
+            position: absolute;
+            top: 26px;
+            bottom: 26px;
+            right: 25px;
+            width: 2px;
+            background: linear-gradient(
+                to bottom,
+                transparent,
+                rgba(47, 128, 255, 0.8) 10%,
+                rgba(0, 198, 255, 0.72) 85%,
+                transparent
+            );
+            content: "";
+        }
+
+        .roadmap-item {
+            position: relative;
+            display: grid;
+            grid-template-columns: 54px 150px 1fr;
+            align-items: start;
+            gap: 18px;
+        }
+
+        .roadmap-dot {
+            position: relative;
+            z-index: 1;
+            width: 18px;
+            height: 18px;
+            margin: 18px auto 0;
+            border: 3px solid var(--primary);
+            border-radius: 50%;
+            background: #07101f;
+            box-shadow: 0 0 0 7px rgba(47, 128, 255, 0.11);
+        }
+
+        .roadmap-item.active .roadmap-dot {
+            border-color: #dff8ff;
+            background: var(--primary-light);
+            box-shadow:
+                0 0 0 8px rgba(0, 198, 255, 0.14),
+                0 0 30px rgba(0, 198, 255, 0.55);
+        }
+
+        .roadmap-date {
+            padding-top: 14px;
+            color: #93c5fd;
+            font-size: 0.96rem;
+            font-weight: 800;
+        }
+
+        .roadmap-card {
+            padding: 20px 22px;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            background: var(--panel);
+            backdrop-filter: blur(10px);
+            transition: 0.3s ease;
+        }
+
+        .roadmap-card:hover {
+            border-color: rgba(47, 128, 255, 0.34);
+            background: var(--panel-hover);
+            box-shadow: 0 18px 38px rgba(0, 0, 0, 0.22);
+            transform: translateX(-5px);
+        }
+
+        .roadmap-card h3 {
+            margin-bottom: 8px;
+            color: #ffffff;
+            font-size: 1.12rem;
+        }
+
+        .roadmap-card p {
+            color: #aebfd2;
+            font-size: 0.95rem;
+            line-height: 1.95;
+        }
+
+        .roadmap-tag {
+            display: inline-flex;
+            padding: 6px 11px;
+            margin-top: 13px;
+            border: 1px solid rgba(47, 128, 255, 0.18);
+            border-radius: 999px;
+            color: #bfdbfe;
+            background: rgba(47, 128, 255, 0.1);
+            font-size: 0.8rem;
+        }
+
+        /* ===============================
+           فوتر
+        =============================== */
+        footer {
+            position: relative;
+            z-index: 1;
+            padding: 28px 24px;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            background: rgba(3, 7, 18, 0.7);
+        }
+
+        .footer-inner {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 18px;
+            max-width: 1240px;
+            margin: 0 auto;
+            color: var(--muted);
+            font-size: 0.92rem;
+        }
+
+        /* ===============================
+           واکنش‌گرایی
+        =============================== */
+        @media (max-width: 1024px) {
+            .hero {
+                min-height: auto;
+                padding-top: 155px;
+            }
+
+            .hero-grid,
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .story-card {
+                width: 100%;
+                max-width: 560px;
+            }
+        }
+
+        @media (max-width: 860px) {
+            .menu {
+                position: absolute;
+                top: calc(100% + 10px);
+                right: 20px;
+                left: 20px;
+                display: none;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 8px;
+                padding: 16px;
+                border: 1px solid var(--border);
+                border-radius: 18px;
+                background: rgba(3, 7, 18, 0.96);
+                box-shadow: var(--shadow);
+            }
+
+            .menu.active {
+                display: flex;
+            }
+
+            .menu a {
+                display: block;
+                padding: 10px 8px;
+            }
+
+            .hamburger {
+                display: inline-flex;
+            }
+
+            .login {
+                display: none;
+            }
+
+            .nav-right {
+                margin-right: auto;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .nav {
+                padding: 14px 16px;
+            }
+
+            .brand {
+                font-size: 1rem;
+            }
+
+            .logo {
+                width: 34px;
+                height: 34px;
+            }
+
+            .hero {
+                padding: 140px 16px 75px;
+            }
+
+            .hero-description,
+            .panel p {
+                font-size: 0.97rem;
+            }
+
+            .content,
+            .roadmap-section {
+                padding-right: 16px;
+                padding-left: 16px;
+            }
+
+            .content {
+                padding-bottom: 82px;
+            }
+
+            .roadmap-section {
+                padding-bottom: 82px;
+            }
+
+            .panel {
+                padding: 22px;
+            }
+
+            .roadmap::before {
+                right: 16px;
+            }
+
+            .roadmap-item {
+                grid-template-columns: 34px 1fr;
+                gap: 12px;
+            }
+
+            .roadmap-dot {
+                width: 15px;
+                height: 15px;
+                margin-top: 18px;
+            }
+
+            .roadmap-date {
+                grid-column: 2;
+                padding-top: 0;
+                margin-bottom: -4px;
+            }
+
+            .roadmap-card {
+                grid-column: 2;
+                padding: 18px;
+            }
+
+            .roadmap-card:hover {
+                transform: none;
+            }
+
+            .footer-inner {
+                justify-content: center;
+                text-align: center;
+                line-height: 1.9;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- پس زمینه ستاره‌ای -->
+    <div class="stars" id="starContainer"></div>
+
+    <!-- هدر -->
+    <header>
+        <div class="nav">
+            <a class="brand" href="index.html" aria-label="صفحه اصلی آرکادیا">
+                <!-- اگر لوگو داری، فایل logo.png را کنار این فایل بگذار -->
+                <img
+                    class="logo"
+                    src="logo.png"
+                    alt="لوگوی آرکادیا"
+                    onerror="this.style.display='none'"
+                />
+                <span>ARCADIA</span>
+            </a>
+
+            <nav class="menu" id="menu" aria-label="ناوبری اصلی">
+                <a href="amooozesh.html">آموزشگاه</a>
+                <a href="sabad.html">سبد خرید</a>
+                <a href="#roadmap">نقشه راه</a>
+                <a href="index.html">صفحه اصلی</a>
+                <a href="mo.html">خالق آرکادیا</a>
+                <a href="story.html" class="active-link">درباره ما</a>
+            </nav>
+
+            <div class="nav-right">
+                <a href="login.html" class="login">ورود / ثبت نام</a>
+
+                <button
+                    class="hamburger"
+                    id="hamburger"
+                    type="button"
+                    aria-label="باز و بسته کردن منو"
+                    aria-expanded="false"
+                >
+                    ☰
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- معرفی صفحه -->
+        <section class="hero">
+            <div class="hero-grid">
+                <div class="hero-content">
+                    <span class="eyebrow">داستان شکل‌گیری آرکادیا</span>
+
+                    <h1>جهانی برای مهندسان صفر و یک...</h1>
+
+                    <p class="hero-description">
+                        آرکادیا از یک ایده ساده شروع شد: ساختن فضایی برای یادگیری، خلق و رشد
+                        در دنیای تکنولوژی. جایی که کدنویسی، امنیت، هوش مصنوعی و Web3 کنار هم
+                        قرار می‌گیرند تا آینده‌ای واقعی ساخته شود.
+                    </p>
+
+                    <div class="hero-actions">
+                        <a href="#about" class="btn btn-primary">ادامه داستان</a>
+                        <a href="#roadmap" class="btn btn-secondary">نقشه تکامل آرکادیا</a>
+                    </div>
+                </div>
+
+                <!-- محل تصویر -->
+                <div class="story-card">
+                    <div class="story-frame" id="storyFrame">
+                        <!--
+                            عکس را در کنار story.html قرار بده و نام آن را در src وارد کن.
+                            مثال: story-photo.jpg
+                        -->
+                        <img
+                            src="story-photo.jpg"
+                            alt="تصویر داستان آرکادیا"
+                            onerror="this.style.display='none'"
+                        />
+
+                        <div class="story-placeholder">
+                            جایگاه تصویر اصلی داستان آرکادیا<br />
+                            فایل عکس را با نام <code>story-photo.jpg</code> کنار فایل قرار بده
+                        </div>
+                    </div>
+
+                    <p class="story-caption">
+                        این بخش برای پوستر برند، تصویر تیم یا عکس شخصی شماست.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- متن داستان -->
+        <section class="content" id="about">
+            <div class="content-grid">
+                <article class="panel">
+                    <h2>آرکادیا؛ جایی که صفر و یک‌ها جان می‌گیرند</h2>
+
+                    <p>
+                        آرکادیا فقط یک پلتفرم آموزشی نیست؛ یک مسیر است. مسیری برای کسانی که
+                        می‌خواهند از یادگیری عبور کنند و به ساختن برسند. اینجا ایده‌ها فقط
+                        نوشته نمی‌شوند، بلکه به محصول، تجربه و آینده تبدیل می‌شوند.
+                    </p>
+
+                    <p>
+                        ما باور داریم تکنولوژی زمانی ارزش واقعی پیدا می‌کند که به انسان‌ها
+                        کمک کند بهتر بسازند، امن‌تر بمانند و خلاق‌تر فکر کنند. برای همین،
+                        آرکادیا بر توسعه نرم‌افزار، امنیت، هوش مصنوعی و Web3 تمرکز دارد.
+                    </p>
+
+                    <div class="highlight">
+                        آینده ساخته نمی‌شود؛ نوشته می‌شود، خط به خط، با کد.
+                    </div>
+                </article>
+
+                
+                </aside>
+            </div>
+        </section>
+
+        <!-- نقشه تکامل آرکادیا -->
+        <section class="roadmap-section" id="roadmap">
+            <div class="section-heading">
+                <span class="section-kicker">مسیر رشد و ساختن</span>
+
+                <h2>نقشه تکامل آرکادیا</h2>
+
+                <p>
+                    آرکادیا یک پروژه ثابت نیست؛ یک اکوسیستم در حال رشد است. هر مرحله از این
+                    مسیر، قدمی برای ساختن آینده‌ای امن‌تر، خلاق‌تر و هوشمندتر است.
+                </p>
+            </div>
+
+            <div class="roadmap">
+                <article class="roadmap-item">
+                    <div class="roadmap-dot"></div>
+
+                    <div class="roadmap-date">آغاز مسیر</div>
+
+                    <div class="roadmap-card">
+                        <h3>ایده آرکادیا شکل گرفت</h3>
+
+                        <p>
+                            آغاز یک چشم‌انداز برای ساخت بستری که یادگیری، کدنویسی و تبدیل
+                            ایده‌های فنی به پروژه‌های واقعی را در کنار هم قرار دهد.
+                        </p>
+
+                        <span class="roadmap-tag">Foundation</span>
+                    </div>
+                </article>
+
+                <article class="roadmap-item">
+                    <div class="roadmap-dot"></div>
+
+                    <div class="roadmap-date">مرحله دوم</div>
+
+                    <div class="roadmap-card">
+                        <h3>ساخت پلتفرم و مسیرهای آموزشی</h3>
+
+                        <p>
+                            توسعه زیرساخت آرکادیا برای همراهی با سازندگان؛ از یادگیری و تمرین
+                            تا حرکت به سمت ساخت محصول و تجربه حرفه‌ای.
+                        </p>
+
+                        <span class="roadmap-tag">Learning & Building</span>
+                    </div>
+                </article>
+
+                <article class="roadmap-item">
+                    <div class="roadmap-dot"></div>
+
+                    <div class="roadmap-date">گسترش اکوسیستم</div>
+
+                    <div class="roadmap-card">
+                        <h3>تولد دپارتمان‌های تخصصی</h3>
+
+                        <p>
+                            شکل‌گیری مسیرهای تخصصی در توسعه نرم‌افزار، امنیت، هوش مصنوعی و
+                            Web3؛ تا هر ایده فضای درست خودش را برای رشد داشته باشد.
+                        </p>
+
+                        <span class="roadmap-tag">Technology Ecosystem</span>
+                    </div>
+                </article>
+
+                <article class="roadmap-item active">
+                    <div class="roadmap-dot"></div>
+
+                    <div class="roadmap-date">اکنون</div>
+
+                    <div class="roadmap-card">
+                        <h3>نوا و متاچین؛ قدم‌های رو به آینده</h3>
+
+                        <p>
+                            نوا به‌عنوان دپارتمان هوش مصنوعی و متاچین در مسیر Web3، بخشی از
+                            چشم‌انداز آرکادیا برای ساخت ابزارها و تجربه‌های دیجیتال نسل بعد هستند.
+                        </p>
+
+                        <span class="roadmap-tag">AI · Web3 · Security</span>
+                    </div>
+                </article>
+
+                <article class="roadmap-item">
+                    <div class="roadmap-dot"></div>
+
+                    <div class="roadmap-date">چشم‌انداز آینده</div>
+
+                    <div class="roadmap-card">
+                        <h3>آرکادیا، خانه سازندگان آینده</h3>
+
+                        <p>
+                            ساخت یک جامعه قدرتمند از مهندسان، طراحان و خالقانی که نمی‌خواهند
+                            فقط آینده را تماشا کنند؛ می‌خواهند آن را با کد بنویسند.
+                        </p>
+
+                        <span class="roadmap-tag">The Next Chapter</span>
+                    </div>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <!-- فوتر -->
+    <footer>
+        <div class="footer-inner">
+            <span>
+                © 2026 Arcadia Platform | تمام حقوق برای مجموعه آرکادیا محفوظ است.
+            </span>
+
+            <span>
+                پیشرو در ارائه خدمات هوش مصنوعی و زیرساخت‌های نوین تکنولوژی.
+            </span>
+        </div>
+    </footer>
+
+    <script>
+        /* ساخت ستاره‌ها */
+        const starContainer = document.getElementById("starContainer");
+
+        for (let i = 0; i < 120; i++) {
+            const star = document.createElement("span");
+
+            star.className = "star";
+            star.style.left = `${Math.random() * 100}%`;
+            star.style.top = `${Math.random() * 100}%`;
+            star.style.opacity = (Math.random() * 0.7 + 0.1).toFixed(2);
+            star.style.animationDelay = `${(Math.random() * 4).toFixed(2)}s`;
+
+            starContainer.appendChild(star);
+        }
+
+        /* منوی موبایل */
+        const hamburger = document.getElementById("hamburger");
+        const menu = document.getElementById("menu");
+
+        hamburger.addEventListener("click", () => {
+            const isOpen = menu.classList.toggle("active");
+
+            hamburger.setAttribute(
+                "aria-expanded",
+                isOpen ? "true" : "false"
+            );
+
+            hamburger.textContent = isOpen ? "✕" : "☰";
+        });
+
+        /* بستن منو با کلیک بیرون از آن */
+        document.addEventListener("click", (event) => {
+            const clickedOutsideMenu =
+                !menu.contains(event.target) &&
+                !hamburger.contains(event.target);
+
+            if (clickedOutsideMenu && menu.classList.contains("active")) {
+                menu.classList.remove("active");
+                hamburger.setAttribute("aria-expanded", "false");
+                hamburger.textContent = "☰";
+            }
+        });
+
+        /* بستن منو بعد از انتخاب لینک در موبایل */
+        menu.querySelectorAll("a").forEach((link) => {
+            link.addEventListener("click", () => {
+                menu.classList.remove("active");
+                hamburger.setAttribute("aria-expanded", "false");
+                hamburger.textContent = "☰";
+            });
+        });
+
+        /* نمایش یا مخفی کردن جایگاه عکس */
+        const storyImage = document.querySelector(".story-frame img");
+        const storyFrame = document.getElementById("storyFrame");
+
+        function setImageState() {
+            if (storyImage && storyImage.naturalWidth > 0) {
+                storyFrame.classList.add("has-image");
+            } else {
+                storyFrame.classList.remove("has-image");
+            }
+        }
+
+        if (storyImage) {
+            storyImage.addEventListener("load", setImageState);
+            storyImage.addEventListener("error", setImageState);
+            setImageState();
+        }
+    </script>
+</body>
+</html>
