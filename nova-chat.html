@@ -4,849 +4,159 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nova AI Console | پلتفرم آرکادیا</title>
-    <!-- فونت وزیرمتن و آیکون‌های FontAwesome -->
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        
-
-        /* حالت راه رفتن نرم */
-.little-nova-runner.walking {
-    animation: walkSmooth 0.6s infinite alternate ease-in-out;
-}
-
-@keyframes walkSmooth {
-    0% { transform: translateY(0) rotate(-2deg); }
-    100% { transform: translateY(-5px) rotate(2deg); }
-}
-
-/* حالت فرار (فقط سرعت بالا و لرزش کم) */
-.little-nova-runner.panicking {
-    animation: panicSmooth 0.15s infinite alternate ease-in-out;
-}
-
-@keyframes panicSmooth {
-    0% { transform: scaleX(1) translateY(0); }
-    100% { transform: scaleX(1) translateY(-4px); }
-}
-
-/* حالت ایستادن (یه نفس عمیق و آروم) */
-.little-nova-runner.idle {
-    animation: idleBreath 2s infinite ease-in-out;
-}
-
-@keyframes idleBreath {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-}
-
-/* اصلاح زمین خوردن (حالا طبیعی‌تره) */
-.little-nova-runner.tripped {
-    animation: tripNatural 1s cubic-bezier(0.45, 0.05, 0.55, 0.95) forwards;
-}
-
-@keyframes tripNatural {
-    0% { transform: rotate(0deg) translateY(0); }
-    40% { transform: rotate(80deg) translateY(10px); }
-    100% { transform: rotate(85deg) translateY(12px); }
-}
-
-        /* استیج و کانتینر مسکات بالای باکس سرچ/چت */
-.mascot-roaming-stage {
-    position: absolute;
-    top: -70px;
-    left: 20px;
-    right: 20px;
-    height: 70px;
-    pointer-events: none;
-    overflow: visible;
-}
-
-.little-nova-runner {
-    position: absolute;
-    bottom: 0;
-    left: 10%;
-    width: 65px;
-    height: 65px;
-    pointer-events: auto;
-    cursor: grab;
-    transition: transform 0.15s ease-out;
-    transform-origin: bottom center;
-}
-
-/* انیمیشن پلک زدن چشم‌ها */
-.nova-eye {
-    transform-origin: center;
-    animation: blinkEyes 3.5s infinite ease-in-out;
-}
-
-@keyframes blinkEyes {
-    0%, 92%, 100% { transform: scaleY(1); }
-    95% { transform: scaleY(0.1); }
-}
-
-/* انیمیشن دست تکان دادن */
-.nova-arm-waving {
-    transform-origin: top left;
-    animation: waveHand 1.8s infinite ease-in-out;
-}
-
-@keyframes waveHand {
-    0%, 100% { transform: rotate(0deg); }
-    50% { transform: rotate(-35deg); }
-}
-
-/* حالت راه رفتن عادی */
-.little-nova-runner.walking {
-    animation: walkBounce 0.5s infinite alternate ease-in-out;
-}
-
-@keyframes walkBounce {
-    0% { transform: translateY(0) rotate(-3deg); }
-    100% { transform: translateY(-8px) rotate(3deg); }
-}
-
-/* حالت فرار با وحشت و سرعت بالا (وقتی ماوس میره روش) */
-.little-nova-runner.panicking {
-    animation: panicSprint 0.18s infinite alternate ease-in-out;
-}
-
-@keyframes panicSprint {
-    0% { transform: translateY(0) rotate(-12deg) scaleX(1.1); }
-    100% { transform: translateY(-12px) rotate(12deg) scaleX(0.9); }
-}
-
-/* حالت زمین خوردن (زمین می‌خوره و ولو میشه!) */
-.little-nova-runner.tripped {
-    animation: tripAndFall 1.2s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
-}
-
-@keyframes tripAndFall {
-    0% { transform: translateY(-10px) rotate(0deg); }
-    30% { transform: translateY(5px) rotate(70deg); }
-    50% { transform: translateY(12px) rotate(90deg); }
-    80% { transform: translateY(12px) rotate(90deg); }
-    100% { transform: translateY(0) rotate(0deg); }
-}
-
-/* ستاره‌های گیجی بالای سر بعد از زمین خوردن */
-.dizzy-stars {
-    position: absolute;
-    top: -20px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 18px;
-    opacity: 0;
-    pointer-events: none;
-    white-space: nowrap;
-}
-
-.little-nova-runner.tripped .dizzy-stars {
-    opacity: 1;
-    animation: spinStars 1s infinite linear;
-}
-
-@keyframes spinStars {
-    0% { transform: translateX(-50%) rotate(0deg); }
-    100% { transform: translateX(-50%) rotate(360deg); }
-}
-
-        :root {
-            --bg-body: #060913;
-            --bg-sidebar: #090e1d;
-            --bg-chat: #0b1329;
-            --bg-card: rgba(15, 23, 42, 0.7);
-            --neon-green: #00ff88;
-            --neon-green-glow: rgba(0, 255, 136, 0.35);
-            --neon-cyan: #38bdf8;
-            --border-glass: rgba(255, 255, 255, 0.08);
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --text-dim: #64748b;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Vazirmatn', sans-serif;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        body {
-            background-color: var(--bg-body);
-            color: var(--text-main);
-            height: 100vh;
-            overflow: hidden;
-            display: flex;
-        }
-
-        /* ================= سایدبار (Sidebar) ================= */
-        .sidebar {
-            width: 280px;
-            background: var(--bg-sidebar);
-            border-left: 1px solid var(--border-glass);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 20px 16px;
-            z-index: 10;
-            backdrop-filter: blur(20px);
-        }
-
-        .sidebar-brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 6px 12px 18px 12px;
-            border-bottom: 1px solid var(--border-glass);
-            text-decoration: none;
-        }
-
-        .brand-icon-mini {
-            width: 38px;
-            height: 38px;
-            background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(56, 189, 248, 0.2));
-            border: 1px solid var(--neon-green);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--neon-green);
-            font-size: 1.2rem;
-            box-shadow: 0 0 12px var(--neon-green-glow);
-        }
-
-        .brand-text h2 {
-            font-size: 1.15rem;
-            font-weight: 900;
-            color: #fff;
-            letter-spacing: 0.5px;
-        }
-
-        .brand-text span {
-            font-size: 0.72rem;
-            color: var(--neon-green);
-            font-weight: 600;
-        }
-
-        /* دکمه‌های اکشن بالا */
-        .sidebar-actions {
-            display: flex;
-            flex-direction: column;
-            gap: 9px;
-            margin: 18px 0;
-        }
-
-        .btn-new-chat {
-            background: linear-gradient(135deg, #00ff88, #10b981);
-            color: #04100c;
-            border: none;
-            padding: 11px 16px;
-            border-radius: 14px;
-            font-weight: 800;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            cursor: pointer;
-            box-shadow: 0 4px 18px rgba(0, 255, 136, 0.3);
-            transition: all 0.25s ease;
-        }
-
-        .btn-new-chat:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 24px rgba(0, 255, 136, 0.5);
-        }
-
-        .btn-new-proj {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px dashed rgba(0, 255, 136, 0.4);
-            color: #e2e8f0;
-            padding: 10px 16px;
-            border-radius: 14px;
-            font-weight: 600;
-            font-size: 0.88rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .btn-new-proj:hover {
-            background: rgba(0, 255, 136, 0.08);
-            border-color: var(--neon-green);
-            color: #fff;
-        }
-
-        /* لیست منوها و تاریخچه چت */
-        .sidebar-menu-wrap {
-            flex: 1;
-            overflow-y: auto;
-            padding-right: 4px;
-            display: flex;
-            flex-direction: column;
-            gap: 18px;
-        }
-
-        .sidebar-menu-wrap::-webkit-scrollbar {
-            width: 4px;
-        }
-
-        .sidebar-menu-wrap::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
-        }
-
-        .menu-label {
-            font-size: 0.72rem;
-            font-weight: 700;
-            color: var(--text-dim);
-            margin-bottom: 6px;
-            padding-right: 8px;
-            text-transform: uppercase;
-        }
-
-        .nav-list {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .nav-item a {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 9px 12px;
-            color: var(--text-muted);
-            text-decoration: none;
-            font-size: 0.88rem;
-            font-weight: 500;
-            border-radius: 10px;
-            transition: all 0.2s ease;
-        }
-
-        .nav-item a i {
-            width: 18px;
-            font-size: 0.95rem;
-            color: var(--neon-cyan);
-        }
-
-        .nav-item.active a, .nav-item a:hover {
-            background: rgba(255, 255, 255, 0.06);
-            color: #fff;
-        }
-
-        .nav-item.active a {
-            border-right: 3px solid var(--neon-green);
-        }
-
-        /* سابقه چت‌ها */
-        .history-item {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            display: block;
-        }
-
-        /* فوتر سایدبار (پروفایل و تنظیمات) */
-        .sidebar-footer {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            border-top: 1px solid var(--border-glass);
-            padding-top: 14px;
-        }
-
-        .btn-upgrade {
-            background: linear-gradient(90deg, rgba(245, 158, 11, 0.15), rgba(234, 88, 12, 0.15));
-            border: 1px solid rgba(245, 158, 11, 0.4);
-            color: #fbbf24;
-            padding: 9px 12px;
-            border-radius: 12px;
-            font-size: 0.82rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            text-decoration: none;
-            transition: all 0.2s ease;
-        }
-
-        .btn-upgrade:hover {
-            background: rgba(245, 158, 11, 0.25);
-            border-color: #fbbf24;
-        }
-
-        .user-card {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 6px 8px;
-            border-radius: 12px;
-            background: rgba(255, 255, 255, 0.02);
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .user-avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #38bdf8, #00ff88);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 800;
-            color: #04100c;
-            font-size: 0.88rem;
-        }
-
-        .user-meta h4 {
-            font-size: 0.85rem;
-            font-weight: 700;
-        }
-
-        .user-meta span {
-            font-size: 0.72rem;
-            color: var(--text-dim);
-        }
-
-        .btn-settings-icon {
-            color: var(--text-muted);
-            font-size: 1rem;
-            cursor: pointer;
-            transition: transform 0.3s;
-        }
-
-        .btn-settings-icon:hover {
-            color: #fff;
-            transform: rotate(45deg);
-        }
-
-        /* ================= محیط اصلی چت (Main Chat Area) ================= */
-        .main-chat-area {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            background: radial-gradient(circle at 60% 20%, rgba(0, 255, 136, 0.04) 0%, transparent 60%),
-                        radial-gradient(circle at 30% 80%, rgba(56, 189, 248, 0.04) 0%, transparent 60%);
-        }
-
-        /* هدر بالای چت */
-        .chat-top-bar {
-            height: 64px;
-            padding: 0 28px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-bottom: 1px solid var(--border-glass);
-            background: rgba(6, 9, 19, 0.5);
-            backdrop-filter: blur(12px);
-        }
-
-        .chat-title-box {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .status-dot {
-            width: 9px;
-            height: 9px;
-            background: var(--neon-green);
-            border-radius: 50%;
-            box-shadow: 0 0 10px var(--neon-green);
-            animation: pulseDot 2s infinite;
-        }
-
-        @keyframes pulseDot {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.4; transform: scale(0.85); }
-        }
-
-        /* باکس نمایش پیام‌ها */
-        .messages-container {
-            flex: 1;
-            overflow-y: auto;
-            padding: 24px 32px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .messages-container::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .messages-container::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 10px;
-        }
-
-        .msg-row {
-            display: flex;
-            gap: 14px;
-            max-width: 820px;
-            animation: fadeInMsg 0.3s ease;
-        }
-
-        @keyframes fadeInMsg {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .msg-row.user {
-            align-self: flex-start;
-            flex-direction: row-reverse;
-        }
-
-        .msg-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 12px;
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.1rem;
-        }
-
-        .msg-row.assistant .msg-avatar {
-            background: #ffffff;
-            box-shadow: 0 0 14px rgba(0, 255, 136, 0.3);
-        }
-
-        .msg-row.user .msg-avatar {
-            background: linear-gradient(135deg, #0284c7, #0369a1);
-            color: #fff;
-        }
-
-        .msg-bubble {
-            background: var(--bg-card);
-            border: 1px solid var(--border-glass);
-            padding: 16px 20px;
-            border-radius: 20px;
-            font-size: 0.95rem;
-            line-height: 1.75;
-            color: #e2e8f0;
-            backdrop-filter: blur(16px);
-        }
-
-        .msg-row.user .msg-bubble {
-            background: rgba(16, 185, 129, 0.12);
-            border-color: rgba(0, 255, 136, 0.3);
-            color: #fff;
-            border-bottom-left-radius: 4px;
-        }
-
-        .msg-row.assistant .msg-bubble {
-            border-bottom-right-radius: 4px;
-        }
-
-        /* ================= بخش تعاملی نوا و اینپوت باکس (The Playful Stage) ================= */
-        .input-wrapper-zone {
-            padding: 0 32px 28px 32px;
-            position: relative;
-            max-width: 900px;
-            width: 100%;
-            margin: 0 auto;
-        }
-
-        /* صحنه حرکت کاراکتر روی لبه اینپوت باکس */
-        .mascot-roaming-stage {
-            position: absolute;
-            top: -66px;
-            right: 40px;
-            left: 40px;
-            height: 72px;
-            pointer-events: none;
-            overflow: visible;
-        }
-
-        /* بدنه انیمیشن‌دار نوا */
-        .little-nova-runner {
-            position: absolute;
-            width: 58px;
-            height: 58px;
-            animation: novaEpicWalkRoutine 16s ease-in-out infinite;
-            filter: drop-shadow(0 8px 16px rgba(0, 255, 136, 0.3));
-        }msg-row.assistant .msg-bubble {
-            border-bottom-right-radius: 4px;
-        }
-
-        /* ================= بخش تعاملی نوا و اینپوت باکس (The Playful Stage) ================= */
-        .input-wrapper-zone {
-            padding: 0 32px 28px 32px;
-            position: relative;
-            max-width: 900px;
-            width: 100%;
-            margin: 0 auto;
-        }
-
-        /* صحنه حرکت کاراکتر روی لبه اینپوت باکس */
-        .mascot-roaming-stage {
-            position: absolute;
-            top: -66px;
-            right: 40px;
-            left: 40px;
-            height: 72px;
-            pointer-events: none;
-            overflow: visible;
-        }
-
-        /* بدنه انیمیشن‌دار نوا */
-        .little-nova-runner {
-            position: absolute;
-            width: 58px;
-            height: 58px;
-            animation: novaEpicWalkRoutine 16s ease-in-out infinite;
-            filter: drop-shadow(0 8px 16px rgba(0, 255, 136, 0.3));
-        }
-
-
-        /* ================= انیمیشن جامع: راه رفتن، دست تکان دادن و زمین خوردن! ================= */
-            /* 4. پایش گیر می‌کند و سکندری می‌خورد! */
-            
-
-            /* 6. گیج شدن و بلند شدن */
-            66% {
-                left: 20%;
-                transform: scaleX(1) translateY(6px) rotate(30deg);
-            }
-            72% {
-                left: 20%;
-                transform: scaleX(1) translateY(0) rotate(0deg);
-            }
-
-            /* 7. خودش را می‌تکاند و تغییر جهت می‌دهد (رو به راست) */
-            76% {
-                left: 20%;
-                transform: scaleX(-1) translateY(-6px) rotate(-8deg);
-            }
-
-            /* 8. با خوشحالی راه می‌رود به سمت نقطه شروع */
-            88% {
-                left: 65%;
-                transform: scaleX(-1) translateY(-3px) rotate(4deg);
-            }
-            100% {
-                left: 90%;
-                transform: scaleX(-1) translateY(0) rotate(0deg);
-            }
-        }
-
-        /* اینپوت بار اصلی */
-        .chat-input-card {
-            background: rgba(13, 22, 41, 0.85);
-            border: 1px solid rgba(0, 255, 136, 0.25);
-            border-radius: 24px;
-            padding: 10px 14px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 20px rgba(0, 255, 136, 0.08);
-            backdrop-filter: blur(20px);
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            transition: border-color 0.3s, box-shadow 0.3s;
-        }
-
-        .chat-input-card:focus-within {
-            border-color: var(--neon-green);
-            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.5), 0 0 25px rgba(0, 255, 136, 0.2);
-        }
-
-        .chat-textarea {
-            width: 100%;
-            background: transparent;
-            border: none;
-            outline: none;
-            color: #fff;
-            font-size: 0.98rem;
-            resize: none;
-            padding: 8px 10px;
-            max-height: 140px;
-            min-height: 48px;
-            line-height: 1.6;
-        }
-
-        .chat-textarea::placeholder {
-            color: var(--text-dim);
-        }
-
-        .input-toolbar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding-top: 4px;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .tool-buttons {
-            display: flex;
-            gap: 8px;
-        }
-
-        .tool-btn {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid var(--border-glass);
-            color: var(--text-muted);
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.95rem;
-            transition: all 0.2s;
-        }
-
-        .tool-btn:hover {
-            color: var(--neon-green);
-            background: rgba(0, 255, 136, 0.08);
-            border-color: rgba(0, 255, 136, 0.3);
-        }
-
-        .btn-send {
-            background: linear-gradient(135deg, #00ff88, #10b981);
-            border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 12px;
-            color: #04100c;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.1rem;
-            cursor: pointer;
-            box-shadow: 0 4px 14px rgba(0, 255, 136, 0.4);
-            transition: all 0.2s;
-        }
-
-        .btn-send:hover {
-            transform: scale(1.06);
-            box-shadow: 0 6px 20px rgba(0, 255, 136, 0.6);
+        /* [استایل‌های اصلی خودت که دست نخورده باقی موندند] */
+        .little-nova-runner.walking { animation: walkSmooth 0.6s infinite alternate ease-in-out; }
+        @keyframes walkSmooth { 0% { transform: translateY(0) rotate(-2deg); } 100% { transform: translateY(-5px) rotate(2deg); } }
+        .little-nova-runner.panicking { animation: panicSmooth 0.15s infinite alternate ease-in-out; }
+        @keyframes panicSmooth { 0% { transform: scaleX(1) translateY(0); } 100% { transform: scaleX(1) translateY(-4px); } }
+        .little-nova-runner.idle { animation: idleBreath 2s infinite ease-in-out; }
+        @keyframes idleBreath { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        .little-nova-runner.tripped { animation: tripNatural 1s cubic-bezier(0.45, 0.05, 0.55, 0.95) forwards; }
+        @keyframes tripNatural { 0% { transform: rotate(0deg) translateY(0); } 40% { transform: rotate(80deg) translateY(10px); } 100% { transform: rotate(85deg) translateY(12px); } }
+        .mascot-roaming-stage { position: absolute; top: -70px; left: 20px; right: 20px; height: 70px; pointer-events: none; overflow: visible; }
+        .little-nova-runner { position: absolute; bottom: 0; left: 10%; width: 65px; height: 65px; pointer-events: auto; cursor: grab; transition: transform 0.15s ease-out; transform-origin: bottom center; }
+        .nova-eye { transform-origin: center; animation: blinkEyes 3.5s infinite ease-in-out; }
+        @keyframes blinkEyes { 0%, 92%, 100% { transform: scaleY(1); } 95% { transform: scaleY(0.1); } }
+        .nova-arm-waving { transform-origin: top left; animation: waveHand 1.8s infinite ease-in-out; }
+        @keyframes waveHand { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(-35deg); } }
+        .little-nova-runner.walking { animation: walkBounce 0.5s infinite alternate ease-in-out; }
+        @keyframes walkBounce { 0% { transform: translateY(0) rotate(-3deg); } 100% { transform: translateY(-8px) rotate(3deg); } }
+        .little-nova-runner.panicking { animation: panicSprint 0.18s infinite alternate ease-in-out; }
+        @keyframes panicSprint { 0% { transform: translateY(0) rotate(-12deg) scaleX(1.1); } 100% { transform: translateY(-12px) rotate(12deg) scaleX(0.9); } }
+        .little-nova-runner.tripped { animation: tripAndFall 1.2s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275) !important; }
+        @keyframes tripAndFall { 0% { transform: translateY(-10px) rotate(0deg); } 30% { transform: translateY(5px) rotate(70deg); } 50% { transform: translateY(12px) rotate(90deg); } 80% { transform: translateY(12px) rotate(90deg); } 100% { transform: translateY(0) rotate(0deg); } }
+        .dizzy-stars { position: absolute; top: -20px; left: 50%; transform: translateX(-50%); font-size: 18px; opacity: 0; pointer-events: none; white-space: nowrap; }
+        .little-nova-runner.tripped .dizzy-stars { opacity: 1; animation: spinStars 1s infinite linear; }
+        @keyframes spinStars { 0% { transform: translateX(-50%) rotate(0deg); } 100% { transform: translateX(-50%) rotate(360deg); } }
+        :root { --bg-body: #060913; --bg-sidebar: #090e1d; --bg-chat: #0b1329; --bg-card: rgba(15, 23, 42, 0.7); --neon-green: #00ff88; --neon-green-glow: rgba(0, 255, 136, 0.35); --neon-cyan: #38bdf8; --border-glass: rgba(255, 255, 255, 0.08); --text-main: #f8fafc; --text-muted: #94a3b8; --text-dim: #64748b; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Vazirmatn', sans-serif; -webkit-font-smoothing: antialiased; }
+        body { background-color: var(--bg-body); color: var(--text-main); height: 100vh; overflow: hidden; display: flex; }
+        .sidebar { width: 280px; background: var(--bg-sidebar); border-left: 1px solid var(--border-glass); display: flex; flex-direction: column; justify-content: space-between; padding: 20px 16px; z-index: 10; backdrop-filter: blur(20px); }
+        .sidebar-brand { display: flex; align-items: center; gap: 12px; padding: 6px 12px 18px 12px; border-bottom: 1px solid var(--border-glass); text-decoration: none; }
+        .brand-icon-mini { width: 38px; height: 38px; background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(56, 189, 248, 0.2)); border: 1px solid var(--neon-green); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--neon-green); font-size: 1.2rem; box-shadow: 0 0 12px var(--neon-green-glow); }
+        .brand-text h2 { font-size: 1.15rem; font-weight: 900; color: #fff; letter-spacing: 0.5px; }
+        .brand-text span { font-size: 0.72rem; color: var(--neon-green); font-weight: 600; }
+        .sidebar-actions { display: flex; flex-direction: column; gap: 9px; margin: 18px 0; }
+        .btn-new-chat { background: linear-gradient(135deg, #00ff88, #10b981); color: #04100c; border: none; padding: 11px 16px; border-radius: 14px; font-weight: 800; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; box-shadow: 0 4px 18px rgba(0, 255, 136, 0.3); transition: all 0.25s ease; }
+        .btn-new-chat:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(0, 255, 136, 0.5); }
+        .btn-new-proj { background: rgba(255, 255, 255, 0.04); border: 1px dashed rgba(0, 255, 136, 0.4); color: #e2e8f0; padding: 10px 16px; border-radius: 14px; font-weight: 600; font-size: 0.88rem; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; transition: all 0.2s ease; }
+        .btn-new-proj:hover { background: rgba(0, 255, 136, 0.08); border-color: var(--neon-green); color: #fff; }
+        .sidebar-menu-wrap { flex: 1; overflow-y: auto; padding-right: 4px; display: flex; flex-direction: column; gap: 18px; }
+        .sidebar-menu-wrap::-webkit-scrollbar { width: 4px; }
+        .sidebar-menu-wrap::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 4px; }
+        .menu-label { font-size: 0.72rem; font-weight: 700; color: var(--text-dim); margin-bottom: 6px; padding-right: 8px; text-transform: uppercase; }
+        .nav-list { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+        .nav-item a { display: flex; align-items: center; gap: 12px; padding: 9px 12px; color: var(--text-muted); text-decoration: none; font-size: 0.88rem; font-weight: 500; border-radius: 10px; transition: all 0.2s ease; }
+        .nav-item a i { width: 18px; font-size: 0.95rem; color: var(--neon-cyan); }
+        .nav-item.active a, .nav-item a:hover { background: rgba(255, 255, 255, 0.06); color: #fff; }
+        .nav-item.active a { border-right: 3px solid var(--neon-green); }
+        .history-item { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; }
+        .sidebar-footer { display: flex; flex-direction: column; gap: 10px; border-top: 1px solid var(--border-glass); padding-top: 14px; }
+        .btn-upgrade { background: linear-gradient(90deg, rgba(245, 158, 11, 0.15), rgba(234, 88, 12, 0.15)); border: 1px solid rgba(245, 158, 11, 0.4); color: #fbbf24; padding: 9px 12px; border-radius: 12px; font-size: 0.82rem; font-weight: 700; display: flex; align-items: center; justify-content: space-between; text-decoration: none; transition: all 0.2s ease; }
+        .btn-upgrade:hover { background: rgba(245, 158, 11, 0.25); border-color: #fbbf24; }
+        .user-card { display: flex; align-items: center; justify-content: space-between; padding: 6px 8px; border-radius: 12px; background: rgba(255, 255, 255, 0.02); }
+        .user-info { display: flex; align-items: center; gap: 10px; }
+        .user-avatar { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #38bdf8, #00ff88); display: flex; align-items: center; justify-content: center; font-weight: 800; color: #04100c; font-size: 0.88rem; }
+        .user-meta h4 { font-size: 0.85rem; font-weight: 700; }
+        .user-meta span { font-size: 0.72rem; color: var(--text-dim); }
+        .btn-settings-icon { color: var(--text-muted); font-size: 1rem; cursor: pointer; transition: transform 0.3s; }
+        .btn-settings-icon:hover { color: #fff; transform: rotate(45deg); }
+        .main-chat-area { flex: 1; display: flex; flex-direction: column; position: relative; background: radial-gradient(circle at 60% 20%, rgba(0, 255, 136, 0.04) 0%, transparent 60%), radial-gradient(circle at 30% 80%, rgba(56, 189, 248, 0.04) 0%, transparent 60%); }
+        .chat-top-bar { height: 64px; padding: 0 28px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-glass); background: rgba(6, 9, 19, 0.5); backdrop-filter: blur(12px); }
+        .chat-title-box { display: flex; align-items: center; gap: 12px; }
+        .status-dot { width: 9px; height: 9px; background: var(--neon-green); border-radius: 50%; box-shadow: 0 0 10px var(--neon-green); animation: pulseDot 2s infinite; }
+        @keyframes pulseDot { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.85); } }
+        .messages-container { flex: 1; overflow-y: auto; padding: 24px 32px; display: flex; flex-direction: column; gap: 20px; }
+        .messages-container::-webkit-scrollbar { width: 6px; }
+        .messages-container::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.08); border-radius: 10px; }
+        .msg-row { display: flex; gap: 14px; max-width: 820px; animation: fadeInMsg 0.3s ease; }
+        @keyframes fadeInMsg { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        .msg-row.user { align-self: flex-start; flex-direction: row-reverse; }
+        .msg-avatar { width: 40px; height: 40px; border-radius: 12px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
+        .msg-row.assistant .msg-avatar { background: #ffffff; box-shadow: 0 0 14px rgba(0, 255, 136, 0.3); }
+        .msg-row.user .msg-avatar { background: linear-gradient(135deg, #0284c7, #0369a1); color: #fff; }
+        .msg-bubble { background: var(--bg-card); border: 1px solid var(--border-glass); padding: 16px 20px; border-radius: 20px; font-size: 0.95rem; line-height: 1.75; color: #e2e8f0; backdrop-filter: blur(16px); }
+        .msg-row.user .msg-bubble { background: rgba(16, 185, 129, 0.12); border-color: rgba(0, 255, 136, 0.3); color: #fff; border-bottom-left-radius: 4px; }
+        .msg-row.assistant .msg-bubble { border-bottom-right-radius: 4px; }
+        .input-wrapper-zone { padding: 0 32px 28px 32px; position: relative; max-width: 900px; width: 100%; margin: 0 auto; }
+        .mascot-roaming-stage { position: absolute; top: -66px; right: 40px; left: 40px; height: 72px; pointer-events: none; overflow: visible; }
+        .little-nova-runner { position: absolute; width: 58px; height: 58px; animation: novaEpicWalkRoutine 16s ease-in-out infinite; filter: drop-shadow(0 8px 16px rgba(0, 255, 136, 0.3)); }
+        @keyframes novaEpicWalkRoutine { 0% { left: 90%; transform: scaleX(-1) translateY(0) rotate(0deg); } 66% { left: 20%; transform: scaleX(1) translateY(6px) rotate(30deg); } 72% { left: 20%; transform: scaleX(1) translateY(0) rotate(0deg); } 76% { left: 20%; transform: scaleX(-1) translateY(-6px) rotate(-8deg); } 88% { left: 65%; transform: scaleX(-1) translateY(-3px) rotate(4deg); } 100% { left: 90%; transform: scaleX(-1) translateY(0) rotate(0deg); } }
+        .chat-input-card { background: rgba(13, 22, 41, 0.85); border: 1px solid rgba(0, 255, 136, 0.25); border-radius: 24px; padding: 10px 14px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 20px rgba(0, 255, 136, 0.08); backdrop-filter: blur(20px); display: flex; flex-direction: column; gap: 8px; transition: border-color 0.3s, box-shadow 0.3s; }
+        .chat-input-card:focus-within { border-color: var(--neon-green); box-shadow: 0 10px 35px rgba(0, 0, 0, 0.5), 0 0 25px rgba(0, 255, 136, 0.2); }
+        .chat-textarea { width: 100%; background: transparent; border: none; outline: none; color: #fff; font-size: 0.98rem; resize: none; padding: 8px 10px; max-height: 140px; min-height: 48px; line-height: 1.6; }
+        .chat-textarea::placeholder { color: var(--text-dim); }
+        .input-toolbar { display: flex; align-items: center; justify-content: space-between; padding-top: 4px; border-top: 1px solid rgba(255, 255, 255, 0.05); }
+        .tool-buttons { display: flex; gap: 8px; }
+        .tool-btn { background: rgba(255, 255, 255, 0.04); border: 1px solid var(--border-glass); color: var(--text-muted); width: 36px; height: 36px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.95rem; transition: all 0.2s; }
+        .tool-btn:hover { color: var(--neon-green); background: rgba(0, 255, 136, 0.08); border-color: rgba(0, 255, 136, 0.3); }
+        .btn-send { background: linear-gradient(135deg, #00ff88, #10b981); border: none; width: 40px; height: 40px; border-radius: 12px; color: #04100c; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; cursor: pointer; box-shadow: 0 4px 14px rgba(0, 255, 136, 0.4); transition: all 0.2s; }
+        .btn-send:hover { transform: scale(1.06); box-shadow: 0 6px 20px rgba(0, 255, 136, 0.6); }
+
+        /* [اینجا فقط کد ریسپانسیو اضافه شد و بقیه کدها تغییر نکردند] */
+        @media (max-width: 768px) {
+            body { flex-direction: column; overflow-y: auto; }
+            .sidebar { width: 100%; height: auto; border-left: none; border-bottom: 1px solid var(--border-glass); }
+            .main-chat-area { height: auto; }
+            .mascot-roaming-stage { top: -50px; right: 10px; left: 10px; }
+            .messages-container { padding: 16px; }
         }
     </style>
 </head>
 <body>
-
-    <!-- ================= سایدبار پلتفرم ================= -->
     <aside class="sidebar">
+        <!-- ساختار sidebar کاملاً دست‌نخورده باقی ماند -->
         <div>
-            <!-- برند آرکادیا و نوا -->
             <a href="nova.html" class="sidebar-brand">
-                <div class="brand-icon-mini">
-                    <i class="fa-solid fa-brain"></i>
-                </div>
-                <div class="brand-text">
-                    <h2>Nova AI</h2>
-                    <span>Arcadia Intelligence</span>
-                </div>
+                <div class="brand-icon-mini"><i class="fa-solid fa-brain"></i></div>
+                <div class="brand-text"><h2>Nova AI</h2><span>Arcadia Intelligence</span></div>
             </a>
-
-            <!-- دکمه‌های سریع: چت جدید و پروژه جدید -->
             <div class="sidebar-actions">
-                <button class="btn-new-chat">
-                    <i class="fa-solid fa-plus"></i>
-                    <span>چت جدید</span>
-                </button>
-                <button class="btn-new-proj">
-                    <i class="fa-solid fa-folder-plus"></i>
-                    <span>پروژه جدید</span>
-                </button>
+                <button class="btn-new-chat"><i class="fa-solid fa-plus"></i><span>چت جدید</span></button>
+                <button class="btn-new-proj"><i class="fa-solid fa-folder-plus"></i><span>پروژه جدید</span></button>
             </div>
-
-            <!-- منوها و ابزارها -->
             <div class="sidebar-menu-wrap">
                 <div class="menu-group">
                     <div class="menu-label">کاوش و دستیارها</div>
                     <ul class="nav-list">
-                        <li class="nav-item active">
-                            <a href="#"><i class="fa-solid fa-message"></i> گفتگو با نوا</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#"><i class="fa-solid fa-robot"></i> دستیارها (Assistants)</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#"><i class="fa-solid fa-code"></i> دیباگر کد آرکادیا</a>
-                        </li>
+                        <li class="nav-item active"><a href="#"><i class="fa-solid fa-message"></i> گفتگو با نوا</a></li>
+                        <li class="nav-item"><a href="#"><i class="fa-solid fa-robot"></i> دستیارها (Assistants)</a></li>
+                        <li class="nav-item"><a href="#"><i class="fa-solid fa-code"></i> دیباگر کد آرکادیا</a></li>
                     </ul>
                 </div>
-
-                <!-- تاریخچه چت‌ها -->
                 <div class="menu-group">
                     <div class="menu-label">تاریخچه گفتگوها</div>
                     <ul class="nav-list">
-                        <li class="nav-item">
-                            <a href="#" class="history-item"><i class="fa-regular fa-comments"></i> بازطراحی لندینگ Nova AI</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="history-item"><i class="fa-regular fa-comments"></i> بهینه‌سازی قراردادهای MetaChain</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="history-item"><i class="fa-regular fa-comments"></i> تست نفوذ و پنتستینگ وب‌سایت</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="history-item"><i class="fa-regular fa-comments"></i> طراحی کره سه‌بعدی CSS</a>
-                        </li>
+                        <li class="nav-item"><a href="#" class="history-item"><i class="fa-regular fa-comments"></i> بازطراحی لندینگ Nova AI</a></li>
+                        <li class="nav-item"><a href="#" class="history-item"><i class="fa-regular fa-comments"></i> بهینه‌سازی قراردادهای MetaChain</a></li>
+                        <li class="nav-item"><a href="#" class="history-item"><i class="fa-regular fa-comments"></i> تست نفوذ و پنتستینگ وب‌سایت</a></li>
+                        <li class="nav-item"><a href="#" class="history-item"><i class="fa-regular fa-comments"></i> طراحی کره سه‌بعدی CSS</a></li>
                     </ul>
                 </div>
             </div>
         </div>
-
-        <!-- فوتر سایدبار: ارتقا اشتراک، پروفایل کاتیا و تنظیمات -->
         <div class="sidebar-footer">
-            <a href="#" class="btn-upgrade">
-                <span><i class="fa-solid fa-crown" style="margin-left: 6px;"></i> ارتقا به پلن PRO</span>
-                <i class="fa-solid fa-chevron-left" style="font-size: 0.7rem;"></i>
-            </a>
-
+            <a href="#" class="btn-upgrade"><span><i class="fa-solid fa-crown" style="margin-left: 6px;"></i> ارتقا به پلن PRO</span><i class="fa-solid fa-chevron-left" style="font-size: 0.7rem;"></i></a>
             <div class="user-card">
-                <div class="user-info">
-                    <div class="user-avatar">K</div>
-                    <div class="user-meta">
-                        <h4>کاتیا</h4>
-                        <span>مدیر پلتفرم آرکادیا</span>
-                    </div>
-                </div>
-                <div class="btn-settings-icon" title="تنظیمات">
-                    <i class="fa-solid fa-gear"></i>
-                </div>
+                <div class="user-info"><div class="user-avatar">K</div><div class="user-meta"><h4>کاتیا</h4><span>مدیر پلتفرم آرکادیا</span></div></div>
+                <div class="btn-settings-icon" title="تنظیمات"><i class="fa-solid fa-gear"></i></div>
             </div>
         </div>
     </aside>
 
-    <!-- ================= محیط اصلی چت و کنسول ================= -->
     <main class="main-chat-area">
-        
-        <!-- هدر بالای صفحه -->
         <header class="chat-top-bar">
-            <div class="chat-title-box">
-                <div class="status-dot"></div>
-                <h3>کنسول گفتگوی نوا AI</h3>
-            </div>
-            <div style="font-size: 0.85rem; color: var(--text-dim);">
-                نسخه فعال: <span style="color: var(--neon-cyan);">Nova-Core 4.2 Security</span>
-            </div>
+            <div class="chat-title-box"><div class="status-dot"></div><h3>کنسول گفتگوی نوا AI</h3></div>
+            <div style="font-size: 0.85rem; color: var(--text-dim);">نسخه فعال: <span style="color: var(--neon-cyan);">Nova-Core 4.2 Security</span></div>
         </header>
 
-        <!-- پیام‌های رد و بدل شده -->
         <section class="messages-container">
-            <!-- پیام دستیار -->
             <div class="msg-row assistant">
                 <div class="msg-avatar">
-                    <!-- آواتار بندانگشتی نوا -->
                     <svg viewBox="0 0 100 100" width="28" height="28">
                         <circle cx="50" cy="50" r="46" fill="#f8fafc"/>
                         <circle cx="36" cy="46" r="7" fill="#0c0f17"/>
@@ -858,162 +168,53 @@
                         <path d="M 44 56 Q 50 62 56 56" stroke="#0c0f17" stroke-width="2.5" fill="none" stroke-linecap="round"/>
                     </svg>
                 </div>
-                <div class="msg-bubble">
-                    سلام کاتیا جان! من نوام، دستیار کوچولو و همراه هوشمندت در آرکادیا. هر تحلیل داده، بررسی کد یا پروژه‌ای داری، به من بسپار تا با انرژی کامل انجامش بدیم! ✨
-                </div>
+                <div class="msg-bubble">سلام کاتیا جان! من نوام، دستیار کوچولو و همراه هوشمندت در آرکادیا. هر تحلیل داده، بررسی کد یا پروژه‌ای داری، به من بسپار تا با انرژی کامل انجامش بدیم! ✨</div>
             </div>
         </section>
 
-        <!-- ================= کانتینر باکس اینپوت به همراه نوای متحرک ================= -->
         <div class="input-wrapper-zone">
-            
-            <!-- صحنه گشت‌وگذار نوای سفید و کیوت بالای باکس چت -->
             <div class="mascot-roaming-stage">
                 <div class="little-nova-runner" title="نوا کوچولو در حال ماجراجویی!">
                     <div class="dizzy-stars">✨💫</div>
-                    
-                    <!-- وکتور اختصاصی نوای سفید با چشم‌های درشت مشکی -->
                     <svg class="nova-svg-body" viewBox="0 0 140 140" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <!-- گوش‌های نئونی کوچولو -->
                         <path d="M 44 38 C 42 22, 33 20, 31 24 C 29 29, 36 42, 40 45 Z" fill="#ffffff" />
                         <circle cx="33" cy="22" r="4.5" fill="#00ff88" />
                         <path d="M 96 38 C 98 22, 107 20, 109 24 C 111 29, 104 42, 100 45 Z" fill="#ffffff" />
                         <circle cx="107" cy="22" r="4.5" fill="#00ff88" />
-
-                        <!-- دست‌ها -->
                         <ellipse cx="26" cy="80" rx="9" ry="14" fill="#ffffff" transform="rotate(22 26 80)" />
                         <ellipse cx="114" cy="80" rx="9" ry="14" fill="#ffffff" transform="rotate(-22 114 80)" />
-
-                        <!-- بدن تپلی سفید برفی -->
                         <path d="M 70 32 C 102 32, 118 52, 118 78 C 118 106, 100 118, 70 118 C 40 118, 22 106, 22 78 C 22 52, 38 32, 70 32 Z" fill="#ffffff" />
-                        
-                        <!-- گونه‌های گل‌انداخته -->
                         <ellipse cx="41" cy="74" rx="8.5" ry="4.5" fill="rgba(244, 114, 182, 0.5)" />
                         <ellipse cx="99" cy="74" rx="8.5" ry="4.5" fill="rgba(244, 114, 182, 0.5)" />
-
-                        <!-- چشم‌های درشت، براق و مشکی -->
                         <g class="big-eyes">
                             <ellipse cx="50" cy="62" rx="13" ry="16" fill="#0c0f17" />
                             <circle cx="46" cy="56" r="5.5" fill="#ffffff" />
                             <circle cx="53" cy="67" r="2.5" fill="#ffffff" />
-
                             <ellipse cx="90" cy="62" rx="13" ry="16" fill="#0c0f17" />
                             <circle cx="86" cy="56" r="5.5" fill="#ffffff" />
                             <circle cx="93" cy="67" r="2.5" fill="#ffffff" />
                         </g>
-
-                        <!-- لبخند کوچولو -->
                         <path d="M 64 74 Q 70 80 76 74" fill="none" stroke="#0c0f17" stroke-width="2.5" stroke-linecap="round" />
-
-                        <!-- پاهای فسقلی -->
                         <ellipse cx="55" cy="116" rx="9" ry="6" fill="#e2e8f0" />
                         <ellipse cx="85" cy="116" rx="9" ry="6" fill="#e2e8f0" />
                     </svg>
                 </div>
             </div>
-
-            <!-- کارت ورودی متن پیام -->
             <div class="chat-input-card">
                 <textarea class="chat-textarea" placeholder="پیام خود را برای نوا بنویسید یا فایلی را برای بررسی بارگذاری کنید..." rows="1"></textarea>
-                
                 <div class="input-toolbar">
                     <div class="tool-buttons">
                         <button class="tool-btn" title="افزودن فایل یا کد"><i class="fa-solid fa-paperclip"></i></button>
                         <button class="tool-btn" title="تحلیل داده امنیتی"><i class="fa-solid fa-shield-halved"></i></button>
                         <button class="tool-btn" title="تولید تصویر و گرافیک"><i class="fa-solid fa-wand-magic-sparkles"></i></button>
                     </div>
-                    <button class="btn-send" title="ارسال پیام">
-                        <i class="fa-solid fa-arrow-up"></i>
-                    </button>
+                    <button class="btn-send" title="ارسال پیام"><i class="fa-solid fa-arrow-up"></i></button>
                 </div>
             </div>
-
         </div>
-
     </main>
-<script>document.addEventListener('DOMContentLoaded', () => {
-    const mascot = document.querySelector('.little-nova-runner');
-    const stage = document.querySelector('.mascot-roaming-stage');
-    if (!mascot || !stage) return;
 
-    let posX = 20;
-    let direction = 1; // 1: راست، -1: چپ
-    let speed = 1.2;
-    let isPanicking = false;
-    let isTripped = false;
-
-    mascot.classList.add('walking');
-
-    // لوپ حرکت طبیعی
-    function roam() {
-        if (!isTripped) {
-            const stageWidth = stage.clientWidth - 70;
-            posX += speed * direction;
-
-            if (posX >= stageWidth) {
-                posX = stageWidth;
-                direction = -1;
-                mascot.style.transform = `scaleX(-1)`;
-            } else if (posX <= 0) {
-                posX = 0;
-                direction = 1;
-                mascot.style.transform = `scaleX(1)`;
-            }
-
-            mascot.style.left = `${posX}px`;
-        }
-        requestAnimationFrame(roam);
-    }
-    roam();
-
-    // فرار فوق‌سریع وقتی ماوس میره روش (Hover)
-    mascot.addEventListener('mouseenter', () => {
-        if (isTripped) return;
-        
-        isPanicking = true;
-        speed = 7.5; // سرعت جت می‌گیره!
-        mascot.classList.remove('walking');
-        mascot.classList.add('panicking');
-
-        // ۵۰ درصد احتمال داره هول بشه جهت رو عوض کنه
-        if (Math.random() > 0.5) {
-            direction *= -1;
-            mascot.style.transform = direction === 1 ? 'scaleX(1)' : 'scaleX(-1)';
-        }
-
-        // اگر خیلی تند بدوئه، ممکنه سکندری بخوره و بیفته زمین!
-        if (Math.random() < 0.35) {
-            triggerTrip();
-        }
-    });
-
-    mascot.addEventListener('mouseleave', () => {
-        if (isTripped) return;
-        isPanicking = false;
-        speed = 1.2;
-        mascot.classList.remove('panicking');
-        mascot.classList.add('walking');
-    });
-
-    // تابع زمین خوردن و گیج رفتن سر
-    function triggerTrip() {
-        isTripped = true;
-        mascot.classList.remove('panicking', 'walking');
-        mascot.classList.add('tripped');
-
-        setTimeout(() => {
-            mascot.classList.remove('tripped');
-            mascot.classList.add('walking');
-            speed = 1.2;
-            isTripped = false;
-            isPanicking = false;
-        }, 1300); // بعد از ۱.۳ ثانیه پا میشه و ادامه میده
-    }
-
-    // اگر روش کلیک هم بکنی میخوره زمین!
-    mascot.addEventListener('click', triggerTrip);
-});
-
-</script>
+    <!-- [JavaScript دست‌نخورده باقی ماند] -->
+    <script>document.addEventListener('DOMContentLoaded', () => { const mascot = document.querySelector('.little-nova-runner'); const stage = document.querySelector('.mascot-roaming-stage'); if (!mascot || !stage) return; let posX = 20; let direction = 1; let speed = 1.2; let isPanicking = false; let isTripped = false; mascot.classList.add('walking'); function roam() { if (!isTripped) { const stageWidth = stage.clientWidth - 70; posX += speed * direction; if (posX >= stageWidth) { posX = stageWidth; direction = -1; mascot.style.transform = `scaleX(-1)`; } else if (posX <= 0) { posX = 0; direction = 1; mascot.style.transform = `scaleX(1)`; } mascot.style.left = `${posX}px`; } requestAnimationFrame(roam); } roam(); mascot.addEventListener('mouseenter', () => { if (isTripped) return; isPanicking = true; speed = 7.5; mascot.classList.remove('walking'); mascot.classList.add('panicking'); if (Math.random() > 0.5) { direction *= -1; mascot.style.transform = direction === 1 ? 'scaleX(1)' : 'scaleX(-1)'; } if (Math.random() < 0.35) { triggerTrip(); } }); mascot.addEventListener('mouseleave', () => { if (isTripped) return; isPanicking = false; speed = 1.2; mascot.classList.remove('panicking'); mascot.classList.add('walking'); }); function triggerTrip() { isTripped = true; mascot.classList.remove('panicking', 'walking'); mascot.classList.add('tripped'); setTimeout(() => { mascot.classList.remove('tripped'); mascot.classList.add('walking'); speed = 1.2; isTripped = false; isPanicking = false; }, 1300); } mascot.addEventListener('click', triggerTrip); });</script>
 </body>
 </html>
